@@ -128,38 +128,38 @@ namespace MDMUtilsTests.Enums
       [Test]
       public void InSingleValueCase()
       {
-        Assert.AreEqual(eTestEnum.SingleDefined, EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("1"));
+        Assert.AreEqual(eTestEnum.SingleDefined, EnumExtensions.ParseStringValueToEnum<eTestEnum>("1"));
       }
 
       [Test]
       public void InSingleValueWithPreferencesCase()
       {
-        Assert.AreEqual(eTestEnum.SingleDefinedWithPreferences, EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("2"));
+        Assert.AreEqual(eTestEnum.SingleDefinedWithPreferences, EnumExtensions.ParseStringValueToEnum<eTestEnum>("2"));
       }
 
       [Test]
       public void InMultiDefinedCases()
       {
-        Assert.AreEqual(eTestEnum.MultiDefined, EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("3"));
+        Assert.AreEqual(eTestEnum.MultiDefined, EnumExtensions.ParseStringValueToEnum<eTestEnum>("3"));
       }
 
       [Test]
       public void InMultiDefinedCasesWithPreferences()
       {
-        Assert.AreEqual(eTestEnum.MultiDefinedWithPreferences, EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("4"));
+        Assert.AreEqual(eTestEnum.MultiDefinedWithPreferences, EnumExtensions.ParseStringValueToEnum<eTestEnum>("4"));
         Assert.AreEqual(eTestEnum.MultiDefinedWithPreferences,
-          EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("Four"));
+          EnumExtensions.ParseStringValueToEnum<eTestEnum>("Four"));
         Assert.AreEqual(eTestEnum.MultiDefinedWithMultiplePreferences,
-          EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("5"));
+          EnumExtensions.ParseStringValueToEnum<eTestEnum>("5"));
         Assert.AreEqual(eTestEnum.MultiDefinedWithMultiplePreferences,
-          EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("Five"));
+          EnumExtensions.ParseStringValueToEnum<eTestEnum>("Five"));
       }
 
       [Test]
       public void WithoutCapitalisationIssues()
       {
         Assert.AreEqual(eTestEnum.MultiDefinedWithPreferences,
-          EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("fOur"));
+          EnumExtensions.ParseStringValueToEnum<eTestEnum>("fOur"));
       }
     }
 
@@ -169,26 +169,26 @@ namespace MDMUtilsTests.Enums
       [Test]
       public void WhenStringIsNull()
       {
-        Assert.Throws<ArgumentNullException>(() => EnumExtensions.ParseStringValueToEnumInt<eTestEnum>(null));
+        Assert.Throws<ArgumentNullException>(() => EnumExtensions.ParseStringValueToEnum<eTestEnum>(null));
       }
 
       [Test]
       public void WhenStringIsUnmatched()
       {
-        Assert.Throws<UnmatchedStringValueException>(() => EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("InvalidStringValue"));
+        Assert.Throws<UnmatchedStringValueException>(() => EnumExtensions.ParseStringValueToEnum<eTestEnum>("InvalidStringValue"));
       }
 
       [Test]
       public void WhenTypePassedIntoTryParseIsNotAnEnum()
       {
         int x;
-        Assert.Throws<InvalidOperationException>(() => EnumExtensions.TryParseStringValueToEnumInt<int>("IrrelevantStringValue", out x));
+        Assert.Throws<InvalidOperationException>(() => EnumExtensions.TryParseStringValueToEnum<int>("IrrelevantStringValue", out x));
       }
 
       [Test]
       public void WhenTypePassedIntoParseIsNotAnEnum()
       {
-        Assert.Throws<InvalidOperationException>(() => EnumExtensions.ParseStringValueToEnumInt<int>("IrrelevantStringValue"));
+        Assert.Throws<InvalidOperationException>(() => EnumExtensions.ParseStringValueToEnum<int>("IrrelevantStringValue"));
       }
 
       [Test]
@@ -198,7 +198,7 @@ namespace MDMUtilsTests.Enums
       {
         try
         {
-          EnumExtensions.ParseStringValueToEnumInt<eTestEnum>(input);
+          EnumExtensions.ParseStringValueToEnum<eTestEnum>(input);
         }
         catch (Exception e)
         {

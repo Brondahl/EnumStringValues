@@ -55,9 +55,10 @@ EnumExtensions                     - Class defining 2 groups of methods: Extensi
   System.Enum.GetStringValue()            - Returns the String Value associated with an Enum.
                                             If more than one value is defined returns the "Preferred" string value.
   System.Enum.GetAllStringValues()        - Returns an IEnumerable of all the String Values associated with an Enum, irrespective of preference.
-  EnumExtensions.ParseStringValueToEnumInt<T>(string)
-                                          - Takes a string and an EnumType and returns the matching Enum value. Throws if no match can be made.
-  EnumExtensions.TryParseStringValueToEnumInt<T>(string, out T)
+  EnumExtensions.ParseStringValueToEnum<T>(string)
+                                          - Takes a string and an EnumType and returns the matching Enum value.
+                                            Throws if no match can be made.
+  EnumExtensions.TryParseStringValueToEnum<T>(string, out T)
                                           - Mirrors the int.TryParse() pattern.
                                             Takes a string and an EnumType and checks for a matching Enum value.
                                             If one exists, populates the out param and returns true. Otherwise returns false.
@@ -69,8 +70,8 @@ EnumExtensions                     - Class defining 2 groups of methods: Extensi
 =============================
 
 Calling .GetStringValue when no string value is defined  ... will return null. (should maybe return enum Name?)
-Calling .ParseStringValueToEnumInt<T>() when the string is null ... will throw an ArgumentNullException
-Calling .ParseStringValueToEnumInt<T>() when the string doesn't match anything ... will throw an UnmatchedStringValueException()
+Calling .ParseStringValueToEnum<T>() when the string is null ... will throw an ArgumentNullException
+Calling .ParseStringValueToEnum<T>() when the string doesn't match anything ... will throw an UnmatchedStringValueException()
 
 
 All the Generic methods are constrained as T: struct, IConvertible, which I believe to be as close to "is an Enum" as one can get in generic Type constraints. There is a further reflection-based check in the code, so calling any of them with T as a non-Enum will throw an InvalidOperationException.
@@ -78,7 +79,7 @@ All the Generic methods are constrained as T: struct, IConvertible, which I beli
 
 Calling .GetStringValue when more than one value is defined but none are marked as preferred ... may return any of the string values.
 Calling .GetStringValue when more than one value is marked as preferred ... may return any of the preferred values.
-Calling .ParseStringValueToEnumInt<T>() when the string is defined for multiple Enums ... may return any of the Enums that it matches.
+Calling .ParseStringValueToEnum<T>() when the string is defined for multiple Enums ... may return any of the Enums that it matches.
 Note that in all of these cases, I suspect that it will always return the top-most value, but that will be dependant on .NET's implementation of various things and is not in anyway guaranteed by this library! Frankly, any of these would be a mis-use of the library and could arguably throw instead.
 
 If TryParseStringValueToEnumInt is called and fails, then it will will populate the output variable to default(T), likely the first defined value of the Enum.
@@ -104,7 +105,6 @@ Once you're defining multiple strings for each enum, you then need to know which
 = TODOs =
 =========
 Fix namespace.
-Fix Parse method names
 
 
 ====================
@@ -126,3 +126,4 @@ I'll attempt to document any feature requests I receive here, along with any des
 0.2 - Initial Readme.
 0.3 - Fix Null string handling.
 0.4 - Improve Attribute constructor layout, and adjust access modifiers
+0.5 - Rename Parse Methods to reflect the fact that they return Enums, not ints.

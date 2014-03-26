@@ -101,7 +101,7 @@ namespace MDMUtils.Enums
 
 
     ///==========================================================================
-    /// Public Method : ParseStringValueToEnumInt
+    /// Public Method : ParseStringValueToEnum
     /// 
     /// <summary>
     ///   Retrieves the Enum matching the string passed in.
@@ -115,10 +115,10 @@ namespace MDMUtils.Enums
     ///   them at compile time.
     /// </remarks>
     ///==========================================================================
-    public static TEnumType ParseStringValueToEnumInt<TEnumType>(string stringValue) where TEnumType : struct, IConvertible
+    public static TEnumType ParseStringValueToEnum<TEnumType>(string stringValue) where TEnumType : struct, IConvertible
     {
       TEnumType lRet;
-      if(TryParseStringValueToEnumInt<TEnumType>(stringValue, out lRet))
+      if(TryParseStringValueToEnum<TEnumType>(stringValue, out lRet))
       {
         return lRet;
       }
@@ -126,7 +126,7 @@ namespace MDMUtils.Enums
     }
 
     ///==========================================================================
-    /// Public Method : TryParseStringValueToEnumInt
+    /// Public Method : TryParseStringValueToEnum
     /// 
     /// <summary>
     ///   Retrieves the Enum matching the string passed in.
@@ -140,7 +140,7 @@ namespace MDMUtils.Enums
     ///   them at compile time.
     /// </remarks>
     ///==========================================================================
-    public static bool TryParseStringValueToEnumInt<TEnumType>(string stringValue, out TEnumType parsedValue) where TEnumType : struct, IConvertible
+    public static bool TryParseStringValueToEnum<TEnumType>(string stringValue, out TEnumType parsedValue) where TEnumType : struct, IConvertible
     {
       Type enumType = typeof (TEnumType);
       if (!enumType.IsEnum)
