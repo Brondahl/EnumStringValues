@@ -167,6 +167,12 @@ namespace MDMUtilsTests.Enums
     public class ParseStringThrows
     {
       [Test]
+      public void WhenStringIsNull()
+      {
+        Assert.Throws<ArgumentNullException>(() => EnumExtensions.ParseStringValueToEnumInt<eTestEnum>(null));
+      }
+
+      [Test]
       public void WhenStringIsUnmatched()
       {
         Assert.Throws<UnmatchedStringValueException>(() => EnumExtensions.ParseStringValueToEnumInt<eTestEnum>("InvalidStringValue"));

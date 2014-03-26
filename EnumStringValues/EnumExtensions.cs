@@ -148,6 +148,11 @@ namespace MDMUtils.Enums
         throw new InvalidOperationException("Type was not an Enum type.");
       }
 
+      if (stringValue == null)
+      {
+        throw new ArgumentNullException("stringValue", "Input string may not be null.");
+      }
+
       foreach (var enumValue in EnumerateValues<TEnumType>())
       {
         var enumStrings = GetStringValues<TEnumType>(enumValue).Select(text => text.ToLower());

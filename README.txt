@@ -69,7 +69,7 @@ EnumExtensions                     - Class defining 2 groups of methods: Extensi
 =============================
 
 Calling .GetStringValue when no string value is defined  ... will return null. (should maybe return enum Name?)
-Calling .ParseStringValueToEnumInt<T>() when the string is null ... will throw a NullReferenceException (will be changed to ArgNullException shortly)
+Calling .ParseStringValueToEnumInt<T>() when the string is null ... will throw an ArgumentNullException
 Calling .ParseStringValueToEnumInt<T>() when the string doesn't match anything ... will throw an UnmatchedStringValueException()
 
 
@@ -103,7 +103,6 @@ Once you're defining multiple strings for each enum, you then need to know which
 =========
 = TODOs =
 =========
-Handle null string input marginally better.
 Fix namespace.
 Fix constructors on attribute.
 Fix Parse method names
@@ -126,3 +125,4 @@ I'll attempt to document any feature requests I receive here, along with any des
 
 0.1 Initial Upload.
 0.2 Initial Readme.
+0.3 Fix Null string handling.
