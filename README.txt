@@ -104,7 +104,7 @@ Once you're defining multiple strings for each enum, you then need to know which
 =========
 = TODOs =
 =========
-
+Reformat this README.txt so that it displays better on GitHub.
 
 ====================
 = Feature Requests =
