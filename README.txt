@@ -48,8 +48,8 @@ EnumExtensions.ParseStringValueToEnumInt<exampleEnum>("Two")
 ==========================
 
 StringValueAttribute               - Attribute applicable to Enum fields
-  StringValueAttribute.ctor(string)       - Defines a string value to associate with an Enum. Defaults "Preferred" to false.
   StringValueAttribute.ctor(string, bool) - Defines a string value to associate with an Enum, and indicates whether it is preferred.
+                                            Second parameter may be omitted and defaults to false.
 
 EnumExtensions                     - Class defining 2 groups of methods: Extension Methods on System.Enum, and static helper methods.
   System.Enum.GetStringValue()            - Returns the String Value associated with an Enum.
@@ -104,7 +104,6 @@ Once you're defining multiple strings for each enum, you then need to know which
 = TODOs =
 =========
 Fix namespace.
-Fix constructors on attribute.
 Fix Parse method names
 
 
@@ -123,6 +122,7 @@ I'll attempt to document any feature requests I receive here, along with any des
 = Version History =
 ===================
 
-0.1 Initial Upload.
-0.2 Initial Readme.
-0.3 Fix Null string handling.
+0.1 - Initial Upload.
+0.2 - Initial Readme.
+0.3 - Fix Null string handling.
+0.4 - Improve Attribute constructor layout, and adjust access modifiers

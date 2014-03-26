@@ -12,19 +12,14 @@ namespace MDMUtils.Enums
   [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
   public class StringValueAttribute : Attribute
   {
-    public StringValueAttribute(string value)
+    public StringValueAttribute(string value, bool preferred = false)
     {
       StringValue = value;
-    }
-
-    public StringValueAttribute(string value, bool preferred)
-      :this (value)
-    {
       Preferred = preferred;
     }
 
-    public string StringValue { get; protected set; }
-    public bool Preferred { get; protected set; }
+    internal string StringValue { get; private set; }
+    internal bool Preferred { get; private set; }
   }
 
   public class UnmatchedStringValueException : Exception
