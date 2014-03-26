@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MDMUtils.Enums
+namespace EnumStringValues
 {
   ///==========================================================================
   /// Class : EnumExtensions

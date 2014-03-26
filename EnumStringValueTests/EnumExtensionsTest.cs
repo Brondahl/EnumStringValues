@@ -1,8 +1,7 @@
 ﻿using System;
-using MDMUtils.Enums;
 using NUnit.Framework;
 
-namespace MDMUtilsTests.Enums
+namespace EnumStringValues.Tests
 {
   public enum eTestEnum
   {
@@ -207,5 +206,5 @@ namespace MDMUtilsTests.Enums
       }
 
     }
-}
+  }
 }

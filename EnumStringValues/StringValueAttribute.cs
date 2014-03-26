@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MDMUtils.Enums
+namespace EnumStringValues
 {
   ///==========================================================================
   /// Class : StringValueAttribute

@@ -104,7 +104,6 @@ Once you're defining multiple strings for each enum, you then need to know which
 =========
 = TODOs =
 =========
-Fix namespace.
 
 
 ====================
@@ -127,3 +126,4 @@ I'll attempt to document any feature requests I receive here, along with any des
 0.3 - Fix Null string handling.
 0.4 - Improve Attribute constructor layout, and adjust access modifiers
 0.5 - Rename Parse Methods to reflect the fact that they return Enums, not ints.
+0.6 - Fix namespaces which previously related to my personal Utilities project :)
