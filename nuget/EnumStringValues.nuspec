@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EnumStringValues</id>
+    <version>0.9.0</version>
+    <authors>Brondahl</authors>
+    <owners>Brondahl</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/Brondahl/EnumStringValues</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Library to allow conversion between an Enum Value and a string, in both directions.</description>
+    <releaseNotes>Initial package.</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>Enum String StringValue EnumStringValue EnumStringValues</tags>
+  </metadata>
+</package>

@@ -105,6 +105,8 @@ Once you're defining multiple strings for each enum, you then need to know which
 = TODOs =
 =========
 Reformat this README.txt so that it displays better on GitHub.
+Make nuget files auto-update.
+Handle nuget frameworks.
 
 ====================
 = Feature Requests =
@@ -114,7 +116,7 @@ I'll attempt to document any feature requests I receive here, along with any des
 
  - Make the Generic "is an Enum" constraint more accurate.
 	I don't know any way to improve on this, but any ideas are welcome.
- - Return enum Name is StringValue not defined.
+ - Return enum Name if StringValue not defined.
 
 
 ===================
@@ -128,3 +130,5 @@ I'll attempt to document any feature requests I receive here, along with any des
 0.5 - Rename Parse Methods to reflect the fact that they return Enums, not ints.
 0.6 - Fix namespaces which previously related to my personal Utilities project :)
 0.7 - Make nuget manage the nUnit dependency.
+0.8 - Upgrade to .NET 4.5.1
+0.9 - Created a nuget package, so committing structure for that.
