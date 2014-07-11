@@ -118,7 +118,8 @@ namespace EnumStringValues
     public static TEnumType ParseStringValueToEnum<TEnumType>(string stringValue) where TEnumType : struct, IConvertible
     {
       TEnumType lRet;
-      if(TryParseStringValueToEnum<TEnumType>(stringValue, out lRet))
+      // ReSharper disable once RedundantTypeArgumentsOfMethod
+      if (TryParseStringValueToEnum<TEnumType>(stringValue, out lRet))
       {
         return lRet;
       }
@@ -155,6 +156,7 @@ namespace EnumStringValues
 
       foreach (var enumValue in EnumerateValues<TEnumType>())
       {
+       // ReSharper disable once RedundantTypeArgumentsOfMethod
         var enumStrings = GetStringValues<TEnumType>(enumValue).Select(text => text.ToLower());
         var inputString = stringValue.ToLower();
 
