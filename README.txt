@@ -103,7 +103,7 @@ Finally, it then seemed to be useful to allow you to define multiple possible st
 = TODOs =
 =========
 Reformat this README.txt so that it displays better on GitHub.
-Make nuget files auto-update.
+
 
 
 ====================
@@ -131,3 +131,4 @@ I'll attempt to document any feature requests I receive here, along with any des
 0.8  - Upgrade to .NET 4.5.1
 0.9  - Created a nuget package, so committing structure for that.
 0.10 - Explicitly support recent major .NET versions.
+0.11 - Update nuget files on build

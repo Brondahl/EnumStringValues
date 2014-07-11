@@ -6,10 +6,20 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumStringValues", "EnumStringValues\EnumStringValues.csproj", "{56FA5FB2-D017-43EC-B76A-FA5438323E31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumStringValueTests", "EnumStringValueTests\EnumStringValueTests.csproj", "{6A5C3CB5-9925-4D8C-84A5-F368FF4C5CFB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{293D49AB-B3BE-4FDC-99D7-55D2CDE1E959} = {293D49AB-B3BE-4FDC-99D7-55D2CDE1E959}
+		{BD3514DD-8F7C-4918-9070-E95BF817BC58} = {BD3514DD-8F7C-4918-9070-E95BF817BC58}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumStringValues_NET35", "EnumStringValues_NET35\EnumStringValues_NET35.csproj", "{BD3514DD-8F7C-4918-9070-E95BF817BC58}"
+	ProjectSection(ProjectDependencies) = postProject
+		{56FA5FB2-D017-43EC-B76A-FA5438323E31} = {56FA5FB2-D017-43EC-B76A-FA5438323E31}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumStringValues_NET40", "EnumStringValues_NET40\EnumStringValues_NET40.csproj", "{293D49AB-B3BE-4FDC-99D7-55D2CDE1E959}"
+	ProjectSection(ProjectDependencies) = postProject
+		{56FA5FB2-D017-43EC-B76A-FA5438323E31} = {56FA5FB2-D017-43EC-B76A-FA5438323E31}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
