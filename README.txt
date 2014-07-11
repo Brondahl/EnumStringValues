@@ -80,9 +80,9 @@ All the Generic methods are constrained as T: struct, IConvertible, which I beli
 Calling .GetStringValue when more than one value is defined but none are marked as preferred ... may return any of the string values.
 Calling .GetStringValue when more than one value is marked as preferred ... may return any of the preferred values.
 Calling .ParseStringValueToEnum<T>() when the string is defined for multiple Enums ... may return any of the Enums that it matches.
-Note that in all of these cases, I suspect that it will always return the top-most value, but that will be dependant on .NET's implementation of various things and is not in anyway guaranteed by this library! Frankly, any of these would be a mis-use of the library and could arguably throw instead.
+Note that in all of these cases, I suspect that it will always return the top-most value, but that will be dependant on .NET's implementation of various methods and is not in anyway guaranteed by this library! Frankly, any of these would be a mis-use of the library and could arguably throw instead.
 
-If TryParseStringValueToEnumInt is called and fails, then it will will populate the output variable to default(T), likely the first defined value of the Enum.
+If TryParseStringValueToEnumInt is called and fails, then it will populate the output variable to default(T), likely the first defined value of the Enum.
 
 
 ============================
@@ -94,9 +94,7 @@ You can convert an Enum value to a string very easily, but only if the string yo
 
 A natural extension of that was then to allow you to convert in the opposite direction - Given a string and an Enum Type return the enum that matches to that string. The scenario here, was reading a datafile into a program, and wanting to have one of the properties as an Enum.
 
-Finally, it then seemed to be useful to allow you to define multiple possible strings that match to the Enum - so that it could handle the possibility that multiple different inputs should actually map to the same Enum.
-
-Once you're defining multiple strings for each enum, you then need to know which one to use when converting from enum to string, so add a property to mark one of those String Values as the 'Preferred' string value.
+Finally, it then seemed to be useful to allow you to define multiple possible strings that match to the Enum - so that it could handle the possibility that multiple different inputs should actually map to the same Enum. Once you're defining multiple strings for each enum, you then need to know which one to use when converting from enum to string, so add a property to mark one of those String Values as the 'Preferred' string value.
 
 
 
@@ -106,7 +104,7 @@ Once you're defining multiple strings for each enum, you then need to know which
 =========
 Reformat this README.txt so that it displays better on GitHub.
 Make nuget files auto-update.
-Handle nuget frameworks.
+
 
 ====================
 = Feature Requests =
@@ -123,12 +121,13 @@ I'll attempt to document any feature requests I receive here, along with any des
 = Version History =
 ===================
 
-0.1 - Initial Upload.
-0.2 - Initial Readme.
-0.3 - Fix Null string handling.
-0.4 - Improve Attribute constructor layout, and adjust access modifiers
-0.5 - Rename Parse Methods to reflect the fact that they return Enums, not ints.
-0.6 - Fix namespaces which previously related to my personal Utilities project :)
-0.7 - Make nuget manage the nUnit dependency.
-0.8 - Upgrade to .NET 4.5.1
-0.9 - Created a nuget package, so committing structure for that.
+0.1  - Initial Upload.
+0.2  - Initial Readme.
+0.3  - Fix Null string handling.
+0.4  - Improve Attribute constructor layout, and adjust access modifiers
+0.5  - Rename Parse Methods to reflect the fact that they return Enums, not ints.
+0.6  - Fix namespaces which previously related to my personal Utilities project :)
+0.7  - Make nuget manage the nUnit dependency.
+0.8  - Upgrade to .NET 4.5.1
+0.9  - Created a nuget package, so committing structure for that.
+0.10 - Explicitly support recent major .NET versions.
