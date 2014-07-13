@@ -47,40 +47,55 @@ EnumExtensions.ParseStringValueToEnumInt<exampleEnum>("Two")
 = Classes, Methods, etc. =
 ==========================
 
-StringValueAttribute               - Attribute applicable to Enum fields
-  StringValueAttribute.ctor(string, bool) - Defines a string value to associate with an Enum, and indicates whether it is preferred.
-                                            Second parameter may be omitted and defaults to false.
+Class: StringValueAttribute   
+An Attribute applicable to Enum fields
 
-EnumExtensions                     - Class defining 2 groups of methods: Extension Methods on System.Enum, and static helper methods.
-  System.Enum.GetStringValue()            - Returns the String Value associated with an Enum.
-                                            If more than one value is defined returns the "Preferred" string value.
-  System.Enum.GetAllStringValues()        - Returns an IEnumerable of all the String Values associated with an Enum, irrespective of preference.
-  EnumExtensions.ParseStringValueToEnum<T>(string)
-                                          - Takes a string and an EnumType and returns the matching Enum value.
-                                            Throws if no match can be made.
-  EnumExtensions.TryParseStringValueToEnum<T>(string, out T)
-                                          - Mirrors the int.TryParse() pattern.
-                                            Takes a string and an EnumType and checks for a matching Enum value.
-                                            If one exists, populates the out param and returns true. Otherwise returns false.
-  EnumExtensions.EnumerateValues<T>()     - Helper Method that returns all of the values in an EnumType.
+Methods:
+    StringValueAttribute.ctor(string, bool)
+        - Defines a string value to associate with an Enum, and indicates whether it
+          is preferred. Second parameter may be omitted and defaults to false.
+---------------------------------------------------------          
+Class: EnumExtensions
+A Class defining 2 groups of methods:
+Extension Methods on System.Enum, and Static helper methods.
+
+Methods
+    System.Enum.GetStringValue()
+        - Returns the String Value associated with an Enum.
+          If more than one value is defined returns the "Preferred" string value.
+    System.Enum.GetAllStringValues()
+        - Returns an IEnumerable of all the String Values associated with an
+          Enum, irrespective of preference.
+    EnumExtensions.ParseStringValueToEnum<T>(string)
+        - Takes a string and an EnumType and returns the matching Enum value.
+          Throws if no match can be made.
+    EnumExtensions.TryParseStringValueToEnum<T>(string, out T)
+        - Mirrors the int.TryParse() pattern.
+          Takes a string and an EnumType and checks for a matching Enum value.
+          If one exists, populates the out param and returns true. Otherwise returns false.
+    EnumExtensions.EnumerateValues<T>()
+        - Helper Method that returns all of the values in an EnumType.
 
 
 =============================
 = Exceptions and Edge Cases =
 =============================
 
-Calling .GetStringValue when no string value is defined  ... will return null. (should maybe return enum Name?)
-Calling .ParseStringValueToEnum<T>() when the string is null ... will throw an ArgumentNullException
-Calling .ParseStringValueToEnum<T>() when the string doesn't match anything ... will throw an UnmatchedStringValueException()
-
-
 All the Generic methods are constrained as T: struct, IConvertible, which I believe to be as close to "is an Enum" as one can get in generic Type constraints. There is a further reflection-based check in the code, so calling any of them with T as a non-Enum will throw an InvalidOperationException.
+Calling GetStringValue when no string value is defined
+...... will return null. (should maybe return enum Name?)
+Calling ParseStringValueToEnum<T>() when the string is null
+...... will throw an ArgumentNullException
+Calling ParseStringValueToEnum<T>() when the string doesn't match anything
+...... will throw an UnmatchedStringValueException()
+Calling GetStringValue when multiple values are defined but none are marked as preferred
+...... may return any of the string values.
+Calling GetStringValue when multiple values are marked as preferred
+...... may return any of the preferred values.
+Calling ParseStringValueToEnum<T>() when the string is defined for multiple Enums
+...... may return any of the Enums that it matches.
 
-
-Calling .GetStringValue when more than one value is defined but none are marked as preferred ... may return any of the string values.
-Calling .GetStringValue when more than one value is marked as preferred ... may return any of the preferred values.
-Calling .ParseStringValueToEnum<T>() when the string is defined for multiple Enums ... may return any of the Enums that it matches.
-Note that in all of these cases, I suspect that it will always return the top-most value, but that will be dependant on .NET's implementation of various methods and is not in anyway guaranteed by this library! Frankly, any of these would be a mis-use of the library and could arguably throw instead.
+Note that in all of these 'may return any' cases, I suspect that it will always return the top-most value, but that will be dependant on .NET's implementation of various methods and is not in anyway guaranteed by this library! Frankly, any of these would be a mis-use of the library and could arguably throw instead.
 
 If TryParseStringValueToEnumInt is called and fails, then it will populate the output variable to default(T), likely the first defined value of the Enum.
 
@@ -102,7 +117,6 @@ Finally, it then seemed to be useful to allow you to define multiple possible st
 =========
 = TODOs =
 =========
-Reformat this README.txt so that it displays better on GitHub.
 
 
 
@@ -132,3 +146,4 @@ I'll attempt to document any feature requests I receive here, along with any des
 0.9  - Created a nuget package, so committing structure for that.
 0.10 - Explicitly support recent major .NET versions.
 0.11 - Update nuget files on build
+1.0  - Final cosmetic tweaks. (Project is now essentially complete and this is likely the last update in a while)
