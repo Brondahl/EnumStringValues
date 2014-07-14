@@ -23,6 +23,8 @@ public enum exampleEnum
 
 
 /* Map from Enum to string. */
+using EnumStringValues.EnumExtensions;
+
 exampleEnum.EnumWithAStringValueDefined.GetStringValue()
                // returns "1"
 
