@@ -29,7 +29,7 @@ exampleEnum.EnumWithAStringValueDefined.GetStringValue()
                // returns "1"
 
 exampleEnum.EnumWithMultipleStringValueDefinedAndOneMarkedAsPreferred.GetStringValue() 
-               // returns "4"
+               // returns "2"
 
 
 /* Map from string to Enum. */
