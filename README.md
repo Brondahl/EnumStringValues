@@ -1,15 +1,13 @@
-===========
-= Summary =
-===========
+EnumStringValues
+================
+
 Library to allow conversion between an Enum Value and a string, in both directions.
 Implemented as an Attribute to be applied to Enum fields to define a string, and methods to extract or match against that string.
 
+Example Usage
+-------------
 
-
-=================
-= Example Usage =
-=================
-
+```
 /* Define Mappings. */
 public enum exampleEnum
 {
@@ -25,11 +23,13 @@ public enum exampleEnum
 
 
 /* Map from Enum to string. */
+using EnumStringValues.EnumExtensions;
+
 exampleEnum.EnumWithAStringValueDefined.GetStringValue()
                // returns "1"
 
 exampleEnum.EnumWithMultipleStringValueDefinedAndOneMarkedAsPreferred.GetStringValue() 
-               // returns "4"
+               // returns "2"
 
 
 /* Map from string to Enum. */
@@ -41,24 +41,28 @@ EnumExtensions.ParseStringValueToEnumInt<exampleEnum>("2")
 
 EnumExtensions.ParseStringValueToEnumInt<exampleEnum>("Two")
                // also returns exampleEnum.EnumWithMultipleStringValuesDefinedAndOneMarkedAsPreferred
+```
 
+Classes, Methods, etc.
+---------------------
 
-==========================
-= Classes, Methods, etc. =
-==========================
+Class: `StringValueAttribute`
 
-Class: StringValueAttribute   
 An Attribute applicable to Enum fields
 
 Methods:
-    StringValueAttribute.ctor(string, bool)
+```
+StringValueAttribute.ctor(string, bool)
         - Defines a string value to associate with an Enum, and indicates whether it
           is preferred. Second parameter may be omitted and defaults to false.
----------------------------------------------------------          
-Class: EnumExtensions
+```
+
+Class: `EnumExtensions`
+
 A Class defining 2 groups of methods:
 Extension Methods on System.Enum, and Static helper methods.
 
+```
 Methods
     System.Enum.GetStringValue()
         - Returns the String Value associated with an Enum.
@@ -75,75 +79,65 @@ Methods
           If one exists, populates the out param and returns true. Otherwise returns false.
     EnumExtensions.EnumerateValues<T>()
         - Helper Method that returns all of the values in an EnumType.
+```
 
-
-=============================
-= Exceptions and Edge Cases =
-=============================
+Exceptions and Edge Cases
+-------------------------
 
 All the Generic methods are constrained as T: struct, IConvertible, which I believe to be as close to "is an Enum" as one can get in generic Type constraints. There is a further reflection-based check in the code, so calling any of them with T as a non-Enum will throw an InvalidOperationException.
-Calling GetStringValue when no string value is defined
-...... will return null. (should maybe return enum Name?)
-Calling ParseStringValueToEnum<T>() when the string is null
-...... will throw an ArgumentNullException
-Calling ParseStringValueToEnum<T>() when the string doesn't match anything
-...... will throw an UnmatchedStringValueException()
-Calling GetStringValue when multiple values are defined but none are marked as preferred
-...... may return any of the string values.
-Calling GetStringValue when multiple values are marked as preferred
-...... may return any of the preferred values.
-Calling ParseStringValueToEnum<T>() when the string is defined for multiple Enums
-...... may return any of the Enums that it matches.
+
+* Calling GetStringValue when no string value is defined
+ * ...... will return null. (should maybe return enum Name?)
+* Calling ParseStringValueToEnum<T>() when the string is null
+ * ...... will throw an ArgumentNullException
+* Calling ParseStringValueToEnum<T>() when the string doesn't match anything
+ * ...... will throw an UnmatchedStringValueException()
+* Calling GetStringValue when multiple values are defined but none are marked as preferred
+ * ...... may return any of the string values.
+* Calling GetStringValue when multiple values are marked as preferred
+ * ...... may return any of the preferred values.
+* Calling ParseStringValueToEnum<T>() when the string is defined for multiple Enums
+ * ...... may return any of the Enums that it matches.
 
 Note that in all of these 'may return any' cases, I suspect that it will always return the top-most value, but that will be dependant on .NET's implementation of various methods and is not in anyway guaranteed by this library! Frankly, any of these would be a mis-use of the library and could arguably throw instead.
 
-If TryParseStringValueToEnumInt is called and fails, then it will populate the output variable to default(T), likely the first defined value of the Enum.
+If `TryParseStringValueToEnumInt` is called and fails, then it will populate the output variable to default(T), likely the first defined value of the Enum.
 
-
-============================
-= Rationale behind library =
-============================
+Rationale behind library
+------------------------
 
 This library was initially constructed to allow an easy way to define the string value associated with each value of an Enumeration. 
 You can convert an Enum value to a string very easily, but only if the string you want is the name of that value - this library allows you to define any string and easily convert from that Enum to that string. The scenario in my case was wanting a piece of text to display to the user that wasn't forced to be CamelCase.
 
 A natural extension of that was then to allow you to convert in the opposite direction - Given a string and an Enum Type return the enum that matches to that string. The scenario here, was reading a datafile into a program, and wanting to have one of the properties as an Enum.
 
-Finally, it then seemed to be useful to allow you to define multiple possible strings that match to the Enum - so that it could handle the possibility that multiple different inputs should actually map to the same Enum. Once you're defining multiple strings for each enum, you then need to know which one to use when converting from enum to string, so add a property to mark one of those String Values as the 'Preferred' string value.
+Finally, it then seemed to be useful to allow you to define multiple possible strings that match to the Enum - so that it could handle the possibility that multiple different inputs should actually map to the same Enum. Once you're defining multiple strings for each enum, you then need to know which one to use when converting from enum to string, so add a property to mark one of those String Values as the '`Preferred`' string value.
 
+TODOs
+=====
 
+Feature Requests
+----------------
 
-
-=========
-= TODOs =
-=========
-
-
-
-====================
-= Feature Requests =
-====================
 Please email me with any requests that occur to you.
 I'll attempt to document any feature requests I receive here, along with any design thoughts or comments on whether they'll happen, etc.
 
  - Make the Generic "is an Enum" constraint more accurate.
-	I don't know any way to improve on this, but any ideas are welcome.
+  -	I don't know any way to improve on this, but any ideas are welcome.
  - Return enum Name if StringValue not defined.
 
+Version History
+----------------
 
-===================
-= Version History =
-===================
-
-0.1  - Initial Upload.
-0.2  - Initial Readme.
-0.3  - Fix Null string handling.
-0.4  - Improve Attribute constructor layout, and adjust access modifiers
-0.5  - Rename Parse Methods to reflect the fact that they return Enums, not ints.
-0.6  - Fix namespaces which previously related to my personal Utilities project :)
-0.7  - Make nuget manage the nUnit dependency.
-0.8  - Upgrade to .NET 4.5.1
-0.9  - Created a nuget package, so committing structure for that.
-0.10 - Explicitly support recent major .NET versions.
-0.11 - Update nuget files on build
-1.0  - Final cosmetic tweaks. (Project is now essentially complete and this is likely the last update in a while)
+- 0.1  - Initial Upload.
+- 0.2  - Initial Readme.
+- 0.3  - Fix Null string handling.
+- 0.4  - Improve Attribute constructor layout, and adjust access modifiers
+- 0.5  - Rename Parse Methods to reflect the fact that they return Enums, not ints.
+- 0.6  - Fix namespaces which previously related to my personal Utilities project :)
+- 0.7  - Make nuget manage the nUnit dependency.
+- 0.8  - Upgrade to .NET 4.5.1
+- 0.9  - Created a nuget package, so committing structure for that.
+- 0.10 - Explicitly support recent major .NET versions.
+- 0.11 - Update nuget files on build
+- 1.0  - Final cosmetic tweaks. (Project is now essentially complete and this is likely the last update in a while)
