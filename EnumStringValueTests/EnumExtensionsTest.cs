@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace EnumStringValues.Tests
@@ -55,25 +57,25 @@ namespace EnumStringValues.Tests
       [Test]
       public void InUndefinedCases()
       {
-        Assert.AreEqual(null, eTestEnum.Unlabelled.GetStringValue());
+        eTestEnum.Unlabelled.GetStringValue().Should().BeNull();
       }
 
       [Test]
       public void InSingleDefinedCases()
       {
-        Assert.AreEqual("1", eTestEnum.SingleDefined.GetStringValue());
+        eTestEnum.SingleDefined.GetStringValue().Should().Be("1");
       }
 
       [Test]
       public void WithPreferences()
       {
-        Assert.AreEqual("2", eTestEnum.SingleDefinedWithPreferences.GetStringValue());
+        eTestEnum.SingleDefinedWithPreferences.GetStringValue().Should().Be("2");
       }
 
       [Test]
       public void InMultiDefinedCases()
       {
-        CollectionAssert.Contains(new[] {"3", "Three"}, eTestEnum.MultiDefined.GetStringValue());
+        eTestEnum.MultiDefined.GetStringValue().Should().BeOneOf("3", "Three");
       }
     }
 
@@ -83,19 +85,19 @@ namespace EnumStringValues.Tests
       [Test]
       public void InSingleDefinedCases()
       {
-        CollectionAssert.AreEquivalent(new[] {"1"}, eTestEnum.SingleDefined.GetAllStringValues());
+        eTestEnum.SingleDefined.GetAllStringValues().Should().BeEquivalentTo("1");
       }
 
       [Test]
       public void InMultiDefinedCases()
       {
-        CollectionAssert.AreEquivalent(new[] {"3", "Three"}, eTestEnum.MultiDefined.GetAllStringValues());
+        eTestEnum.MultiDefined.GetAllStringValues().Should().BeEquivalentTo("3", "Three");
       }
 
       [Test]
       public void InMultiDefinedCasesWithPreferences()
       {
-        CollectionAssert.AreEquivalent(new[] {"4", "Four"}, eTestEnum.MultiDefinedWithPreferences.GetAllStringValues());
+        eTestEnum.MultiDefinedWithPreferences.GetAllStringValues().Should().BeEquivalentTo("4", "Four");
       }
     }
 
@@ -105,19 +107,19 @@ namespace EnumStringValues.Tests
       [Test]
       public void InSingleDefinedCasesWithPreferences()
       {
-        Assert.AreEqual("2", eTestEnum.SingleDefinedWithPreferences.GetStringValue());
+        eTestEnum.SingleDefinedWithPreferences.GetStringValue().Should().Be("2");
       }
 
       [Test]
       public void InMultiDefinedCasesWithPreferences()
       {
-        Assert.AreEqual("4", eTestEnum.MultiDefinedWithPreferences.GetStringValue());
+        eTestEnum.MultiDefinedWithPreferences.GetStringValue().Should().Be("4");
       }
 
       [Test]
       public void InMultiDefinedMultiPreferenceCases()
       {
-        CollectionAssert.Contains(new[] {"5", "Five"}, eTestEnum.MultiDefinedWithMultiplePreferences.GetStringValue());
+        eTestEnum.MultiDefinedWithMultiplePreferences.GetStringValue().Should().BeOneOf("5", "Five");
       }
     }
 
@@ -127,38 +129,34 @@ namespace EnumStringValues.Tests
       [Test]
       public void InSingleValueCase()
       {
-        Assert.AreEqual(eTestEnum.SingleDefined, EnumExtensions.ParseStringValueToEnum<eTestEnum>("1"));
+        EnumExtensions.ParseStringValueToEnum<eTestEnum>("1").Should().Be(eTestEnum.SingleDefined);
       }
 
       [Test]
       public void InSingleValueWithPreferencesCase()
       {
-        Assert.AreEqual(eTestEnum.SingleDefinedWithPreferences, EnumExtensions.ParseStringValueToEnum<eTestEnum>("2"));
+        EnumExtensions.ParseStringValueToEnum<eTestEnum>("2").Should().Be(eTestEnum.SingleDefinedWithPreferences);
       }
 
       [Test]
       public void InMultiDefinedCases()
       {
-        Assert.AreEqual(eTestEnum.MultiDefined, EnumExtensions.ParseStringValueToEnum<eTestEnum>("3"));
+        EnumExtensions.ParseStringValueToEnum<eTestEnum>("3").Should().Be(eTestEnum.MultiDefined);
       }
 
       [Test]
       public void InMultiDefinedCasesWithPreferences()
       {
-        Assert.AreEqual(eTestEnum.MultiDefinedWithPreferences, EnumExtensions.ParseStringValueToEnum<eTestEnum>("4"));
-        Assert.AreEqual(eTestEnum.MultiDefinedWithPreferences,
-          EnumExtensions.ParseStringValueToEnum<eTestEnum>("Four"));
-        Assert.AreEqual(eTestEnum.MultiDefinedWithMultiplePreferences,
-          EnumExtensions.ParseStringValueToEnum<eTestEnum>("5"));
-        Assert.AreEqual(eTestEnum.MultiDefinedWithMultiplePreferences,
-          EnumExtensions.ParseStringValueToEnum<eTestEnum>("Five"));
+        EnumExtensions.ParseStringValueToEnum<eTestEnum>("4").Should().Be(eTestEnum.MultiDefinedWithPreferences);
+        EnumExtensions.ParseStringValueToEnum<eTestEnum>("Four").Should().Be(eTestEnum.MultiDefinedWithPreferences);
+        EnumExtensions.ParseStringValueToEnum<eTestEnum>("5").Should().Be(eTestEnum.MultiDefinedWithMultiplePreferences);
+        EnumExtensions.ParseStringValueToEnum<eTestEnum>("Five").Should().Be(eTestEnum.MultiDefinedWithMultiplePreferences);
       }
 
       [Test]
-      public void WithoutCapitalisationIssues()
+      public void AndIsCaseInsensitive()
       {
-        Assert.AreEqual(eTestEnum.MultiDefinedWithPreferences,
-          EnumExtensions.ParseStringValueToEnum<eTestEnum>("fOur"));
+        EnumExtensions.ParseStringValueToEnum<eTestEnum>("fOur").Should().Be(eTestEnum.MultiDefinedWithPreferences);
       }
     }
 
@@ -168,43 +166,38 @@ namespace EnumStringValues.Tests
       [Test]
       public void WhenStringIsNull()
       {
-        Assert.Throws<ArgumentNullException>(() => EnumExtensions.ParseStringValueToEnum<eTestEnum>(null));
+        Action parseAttempt = (() => EnumExtensions.ParseStringValueToEnum<eTestEnum>(null));
+        parseAttempt.ShouldThrow<ArgumentNullException>();
       }
 
       [Test]
       public void WhenStringIsUnmatched()
       {
-        Assert.Throws<UnmatchedStringValueException>(() => EnumExtensions.ParseStringValueToEnum<eTestEnum>("InvalidStringValue"));
+        Action parseAttempt = (() => EnumExtensions.ParseStringValueToEnum<eTestEnum>("InvalidStringValue"));
+        parseAttempt.ShouldThrow<UnmatchedStringValueException>();
       }
 
       [Test]
       public void WhenTypePassedIntoTryParseIsNotAnEnum()
       {
         int x;
-        Assert.Throws<InvalidOperationException>(() => EnumExtensions.TryParseStringValueToEnum<int>("IrrelevantStringValue", out x));
+        Action parseAttempt = (() => EnumExtensions.TryParseStringValueToEnum<int>("IrrelevantStringValue", out x));
+        parseAttempt.ShouldThrow<InvalidOperationException>();
       }
 
       [Test]
       public void WhenTypePassedIntoParseIsNotAnEnum()
       {
-        Assert.Throws<InvalidOperationException>(() => EnumExtensions.ParseStringValueToEnum<int>("IrrelevantStringValue"));
+        Action parseAttempt = (() => EnumExtensions.ParseStringValueToEnum<int>("IrrelevantStringValue"));
+        parseAttempt.ShouldThrow<InvalidOperationException>();
       }
 
       [Test]
-      [TestCase("InvalidStringValue", Description = "To hit catch case."),
-       TestCase("1", Description = "To hit non-catch case.")]
-      public void AnExceptionWithTheExpectedText(string input)
+      public void AnExceptionWithTheExpectedText()
       {
-        try
-        {
-          EnumExtensions.ParseStringValueToEnum<eTestEnum>(input);
-        }
-        catch (Exception e)
-        {
-          Assert.AreEqual(e.Message, "String does not match to any value of the specified Enum. Attempted to Parse InvalidStringValue into an Enum of type eTestEnum.");
-        }
+        Action parseAttempt = (() => EnumExtensions.ParseStringValueToEnum<eTestEnum>("InvalidStringValue"));
+        parseAttempt.ShouldThrow<Exception>().WithMessage("String does not match to any value of the specified Enum. Attempted to Parse InvalidStringValue into an Enum of type eTestEnum.");
       }
-
     }
   }
 }
