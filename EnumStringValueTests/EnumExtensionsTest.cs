@@ -161,6 +161,77 @@ namespace EnumStringValues.Tests
     }
 
     [TestFixture]
+    public class ParseStringWorksAsAnExtensionMethodOnString
+    {
+      [Test]
+      public void InDefaultCase()
+      {
+        ("Unlabelled").ParseToEnum<eTestEnum>().Should().Be(eTestEnum.Unlabelled);
+      }
+
+      [Test]
+      public void InSingleValueCase()
+      {
+        ("1").ParseToEnum<eTestEnum>().Should().Be(eTestEnum.SingleDefined);
+      }
+
+      [Test]
+      public void InSingleValueWithPreferencesCase()
+      {
+        ("2").ParseToEnum<eTestEnum>().Should().Be(eTestEnum.SingleDefinedWithPreferences);
+      }
+
+      [Test]
+      public void InMultiDefinedCases()
+      {
+        ("3").ParseToEnum<eTestEnum>().Should().Be(eTestEnum.MultiDefined);
+      }
+
+      [Test]
+      public void InMultiDefinedCasesWithPreferences()
+      {
+        ("4").ParseToEnum<eTestEnum>().Should().Be(eTestEnum.MultiDefinedWithPreferences);
+        ("Four").ParseToEnum<eTestEnum>().Should().Be(eTestEnum.MultiDefinedWithPreferences);
+        ("5").ParseToEnum<eTestEnum>().Should().Be(eTestEnum.MultiDefinedWithMultiplePreferences);
+        ("Five").ParseToEnum<eTestEnum>().Should().Be(eTestEnum.MultiDefinedWithMultiplePreferences);
+      }
+
+      [Test]
+      public void AndIsCaseInsensitive()
+      {
+        ("fOur").ParseToEnum<eTestEnum>().Should().Be(eTestEnum.MultiDefinedWithPreferences);
+      }
+    }
+
+    [TestFixture]
+    public class ParseStringWorksAsAnExtensionMethodOnStringEnumerations
+    {
+      [Test]
+      public void ForSingleElementEnumerations()
+      {
+        (new[] { "1" }).ParseToEnumList<eTestEnum>().Should().BeEquivalentTo(eTestEnum.SingleDefined);
+      }
+
+      [Test]
+      public void ForMultiElementEnumerations()
+      {
+        (new[] { "1", "2" }).ParseToEnumList<eTestEnum>().Should().BeEquivalentTo(eTestEnum.SingleDefined, eTestEnum.SingleDefinedWithPreferences);
+      }
+
+      [Test]
+      public void ForDifferentStringsMappingToSameEnum()
+      {
+        (new[] { "4", "Four" }).ParseToEnumList<eTestEnum>().Should().BeEquivalentTo(eTestEnum.MultiDefinedWithPreferences, eTestEnum.MultiDefinedWithPreferences);
+      }
+
+      [Test]
+      public void ForDuplicatedStrings()
+      {
+        (new[] { "1", "1" }).ParseToEnumList<eTestEnum>().Should().BeEquivalentTo(eTestEnum.SingleDefined, eTestEnum.SingleDefined);
+      }
+    }
+
+    [TestFixture]
     public class ParseStringThrows
     {
       [Test]
@@ -174,6 +245,20 @@ namespace EnumStringValues.Tests
       public void WhenStringIsUnmatched()
       {
         Action parseAttempt = (() => EnumExtensions.ParseStringValueToEnum<eTestEnum>("InvalidStringValue"));
+        parseAttempt.ShouldThrow<UnmatchedStringValueException>();
+      }
+
+      [Test]
+      public void WhenInvokedAsAnExtensionMethodOnString()
+      {
+        Action parseAttempt = (() => ("InvalidStringValue").ParseToEnum<eTestEnum>());
+        parseAttempt.ShouldThrow<UnmatchedStringValueException>();
+      }
+
+      [Test]
+      public void WhenInvokedAsAnExtensionMethodOnList()
+      {
+        Action parseAttempt = (() => (new [] {"1", "InvalidStringValue"}).ParseToEnumList<eTestEnum>());
         parseAttempt.ShouldThrow<UnmatchedStringValueException>();
       }
 

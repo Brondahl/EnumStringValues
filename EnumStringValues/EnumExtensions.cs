@@ -127,6 +127,41 @@ namespace EnumStringValues
     }
 
     ///==========================================================================
+    /// Public Extension Method on System.String: ParseToEnum
+    /// 
+    /// <summary>
+    ///   Retrieves the Enum matching the string passed in.
+    ///   Throws if no match was found.
+    /// </summary>
+    /// <remarks>
+    ///   Duplicate of ParseStringValueToEnum{T} renamed to make more sense when
+    ///   called as an extension method on System.String
+    /// </remarks>
+    ///==========================================================================
+    public static TEnumType ParseToEnum<TEnumType>(this string stringValue) where TEnumType : struct, IConvertible
+    {
+        return ParseStringValueToEnum<TEnumType>(stringValue);
+    }
+
+    ///==========================================================================
+    /// Public Extension Method on List{String}: ParseToEnumList
+    /// 
+    /// <summary>
+    ///   Iterates over the collection of string, calling ParseToEnum on each one.
+    /// </summary>
+    /// <remarks>
+    ///   Will throw if ANY of the values are unmatchable.
+    ///  
+    ///   Call ToList() to force immediate instantiation and thus immediate
+    ///   failure if any values aren't matched.
+    /// </remarks>
+    ///==========================================================================
+    public static List<TEnumType> ParseToEnumList<TEnumType>(this IEnumerable<string> stringValueCollection) where TEnumType : struct, IConvertible
+    {
+        return stringValueCollection.Select(ParseToEnum<TEnumType>).ToList();
+    }
+
+    ///==========================================================================
     /// Public Method : TryParseStringValueToEnum
     /// 
     /// <summary>
@@ -141,7 +176,7 @@ namespace EnumStringValues
     ///   them at compile time.
     /// </remarks>
     ///==========================================================================
-    public static bool TryParseStringValueToEnum<TEnumType>(string stringValue, out TEnumType parsedValue) where TEnumType : struct, IConvertible
+    public static bool TryParseStringValueToEnum<TEnumType>(this string stringValue, out TEnumType parsedValue) where TEnumType : struct, IConvertible
     {
       Type enumType = typeof (TEnumType);
       if (!enumType.IsEnum)
