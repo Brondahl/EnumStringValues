@@ -57,7 +57,7 @@ namespace EnumStringValues.Tests
       [Test]
       public void InUndefinedCases()
       {
-        eTestEnum.Unlabelled.GetStringValue().Should().BeNull();
+        eTestEnum.Unlabelled.GetStringValue().Should().Be("Unlabelled");
       }
 
       [Test]
@@ -126,6 +126,12 @@ namespace EnumStringValues.Tests
     [TestFixture]
     public class ParseStringWorks
     {
+      [Test]
+      public void InDefaultCase()
+      {
+        EnumExtensions.ParseStringValueToEnum<eTestEnum>("Unlabelled").Should().Be(eTestEnum.Unlabelled);
+      }
+
       [Test]
       public void InSingleValueCase()
       {

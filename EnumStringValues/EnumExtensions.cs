@@ -84,7 +84,8 @@ namespace EnumStringValues
     /// 
     /// <summary>
     ///   Retrieves the StringValueAttributes associated with the enum.
-    ///   Returns an empty Collection, if no StringValues are specified.
+    ///   If no StringValues are specified, defaults to treating the EnumName as
+    ///   the implicit StringValue.
     /// </summary>
     ///==========================================================================
     private static IEnumerable<StringValueAttribute> GetStringValuesWithPreferences(this Enum value)
@@ -96,7 +97,14 @@ namespace EnumStringValues
           .GetCustomAttributes(typeof (StringValueAttribute), false)
           .Cast<StringValueAttribute>();
 
-      return stringValueAttributes;
+      if (stringValueAttributes.Any())
+      {
+        return stringValueAttributes;
+      }
+      else
+      {
+        return new []{new StringValueAttribute(value.ToString())};
+      }
     }
 
 
