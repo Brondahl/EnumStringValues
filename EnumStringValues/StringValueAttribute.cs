@@ -13,13 +13,25 @@ namespace EnumStringValues
   public class StringValueAttribute : Attribute
   {
     public StringValueAttribute(string value, bool preferred = false)
+      : this(value, preferred ? PreferenceLevel.High : PreferenceLevel.Default) 
+    {
+    }
+
+    internal StringValueAttribute(string value, PreferenceLevel preferenceLevel)
     {
       StringValue = value;
-      Preferred = preferred;
+      Preference = preferenceLevel;
     }
 
     internal string StringValue { get; private set; }
-    internal bool Preferred { get; private set; }
+    internal PreferenceLevel Preference { get; private set; }
+  }
+
+  internal enum PreferenceLevel
+  {
+    High = 0,
+    Default = 1,
+    Low = 2
   }
 
   public class UnmatchedStringValueException : Exception

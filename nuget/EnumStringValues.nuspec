@@ -2,14 +2,20 @@
 <package >
   <metadata>
     <id>EnumStringValues</id>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <authors>Brondahl</authors>
     <owners>Brondahl</owners>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/Brondahl/EnumStringValues</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library to allow conversion between an Enum Value and a string, in both directions.</description>
-    <releaseNotes>First Full-Release Package</releaseNotes>
+    <releaseNotes>
+    Version 2.0 
+       - Make the library use the existing Enum name as its default string value
+       - Exposed the Parse methods as extensions on `String` and `List&lt;string&gt;`
+       - Added a clone of the basic Parse method renamed as `ParseToEnum&lt;T&gt;`
+       - NOTE: The old parse method (`ParseStringValueToEnum`) is now deprecated and will be removed in vNext. ParseToEnum is identical and should be used instead.
+    </releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>Enum String StringValue EnumStringValue EnumStringValues</tags>
   </metadata>

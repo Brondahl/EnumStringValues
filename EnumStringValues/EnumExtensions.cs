@@ -29,20 +29,17 @@ namespace EnumStringValues
     ///   specified, returns any arbitrary one of the values (selected from the 
     ///   preferred values in the latter case.
     ///   
-    ///   Returns null, if no StringValue was specified at all.
+    ///   Returns the Enum name, if no StringValue was specified at all.
     /// </summary>
     ///==========================================================================
-    public static string GetStringValue(this Enum value)
+    public static string GetStringValue(this Enum enumValue)
     {
-      var preferredValues = value.GetPreferredStringValues().ToList();
-      
-      if(preferredValues.Any())
-      {
-        return preferredValues.First();
-      }
-
-      var possibleValues = value.GetAllStringValues();
-      return possibleValues.FirstOrDefault();
+      return
+        enumValue
+          .GetStringValuesWithPreferences()
+          .OrderBy(attribute => attribute.Preference)
+          .Select(attribute => attribute.StringValue)
+          .FirstOrDefault();
     }
 
     ///==========================================================================
@@ -50,8 +47,8 @@ namespace EnumStringValues
     /// 
     /// <summary>
     ///   Retrieves the full Collection of StringValues associated with the
-    ///   particular enum.
-    ///   Returns an empty collection, if no StringValues are specified.
+    ///   particular enum (including the Enum's name)
+    ///   If no StringValues are specified, then returns ONLY the Enum's name.
     /// </summary>
     ///==========================================================================
     public static IEnumerable<string> GetAllStringValues(this Enum value)
@@ -62,46 +59,26 @@ namespace EnumStringValues
     }
 
     ///==========================================================================
-    /// Method : GetPreferredStringValues
-    /// 
-    /// <summary>
-    ///   Retrieves those StringValues associated with the enum, which are marked
-    ///   as preferred.
-    ///   Returns an empty Collection, if no StringValues are specified.
-    /// </summary>
-    ///==========================================================================
-    private static IEnumerable<string> GetPreferredStringValues(this Enum value)
-    {
-      var valuesPreferencePairs = value.GetStringValuesWithPreferences();
-
-      return valuesPreferencePairs
-               .Where(pair => pair.Preferred)
-               .Select(pair => pair.StringValue);
-    }
-
-    ///==========================================================================
     /// Method : GetStringValuesWithPreferences
     /// 
     /// <summary>
     ///   Retrieves the StringValueAttributes associated with the enum.
-    ///   Returns an empty Collection, if no StringValues are specified.
+    ///   If no StringValues are specified, defaults to treating the EnumName as
+    ///   the implicit StringValue.
     /// </summary>
     ///==========================================================================
     private static IEnumerable<StringValueAttribute> GetStringValuesWithPreferences(this Enum value)
     {
-      var stringValueAttributes =
-        value
-          .GetType()
-          .GetField(value.ToString())
-          .GetCustomAttributes(typeof (StringValueAttribute), false)
-          .Cast<StringValueAttribute>();
-
-      return stringValueAttributes;
+      return value
+              .GetType()
+              .GetField(value.ToString())
+              .GetCustomAttributes(typeof (StringValueAttribute), false)
+              .Cast<StringValueAttribute>()
+              .DefaultIfEmpty(new StringValueAttribute(value.ToString(), PreferenceLevel.Low));
     }
 
-
     ///==========================================================================
-    /// Public Method : ParseStringValueToEnum
+    /// Public Extension Method on System.String: ParseToEnum
     /// 
     /// <summary>
     ///   Retrieves the Enum matching the string passed in.
@@ -115,15 +92,52 @@ namespace EnumStringValues
     ///   them at compile time.
     /// </remarks>
     ///==========================================================================
+    public static TEnumType ParseToEnum<TEnumType>(this string stringValue) where TEnumType : struct, IConvertible
+    {
+        TEnumType lRet;
+        // ReSharper disable once RedundantTypeArgumentsOfMethod
+        if (TryParseStringValueToEnum<TEnumType>(stringValue, out lRet))
+        {
+          return lRet;
+        }
+        throw new UnmatchedStringValueException(stringValue, typeof(TEnumType));
+    }
+
+    ///==========================================================================
+    /// Public Method : ParseStringValueToEnum
+    /// 
+    /// <summary>
+    ///   !!OBSOLETE!! Please use the identical 'ParseToEnum' method instead.
+    ///   Retrieves the Enum matching the string passed in.
+    ///   Throws if no match was found.
+    /// </summary>
+    /// <remarks>
+    ///   Duplicate of ParseToEnum{T} with original name to support backwards
+    ///   compatibility. Will be removed in a v3 (if that ever gets released)
+    /// </remarks>
+    ///==========================================================================
+    [Obsolete("Please use the identical 'ParseToEnum' method instead.")]
     public static TEnumType ParseStringValueToEnum<TEnumType>(string stringValue) where TEnumType : struct, IConvertible
     {
-      TEnumType lRet;
-      // ReSharper disable once RedundantTypeArgumentsOfMethod
-      if (TryParseStringValueToEnum<TEnumType>(stringValue, out lRet))
-      {
-        return lRet;
-      }
-      throw new UnmatchedStringValueException(stringValue, typeof(TEnumType));
+      return ParseToEnum<TEnumType>(stringValue);
+    }
+
+    ///==========================================================================
+    /// Public Extension Method on List{String}: ParseToEnumList
+    /// 
+    /// <summary>
+    ///   Iterates over the collection of string, calling ParseToEnum on each one.
+    /// </summary>
+    /// <remarks>
+    ///   Will throw if ANY of the values are unmatchable.
+    ///  
+    ///   Calls ToList() to force immediate instantiation and thus immediate
+    ///   failure if any values aren't matched.
+    /// </remarks>
+    ///==========================================================================
+    public static List<TEnumType> ParseToEnumList<TEnumType>(this IEnumerable<string> stringValueCollection) where TEnumType : struct, IConvertible
+    {
+        return stringValueCollection.Select(ParseToEnum<TEnumType>).ToList();
     }
 
     ///==========================================================================
@@ -141,7 +155,7 @@ namespace EnumStringValues
     ///   them at compile time.
     /// </remarks>
     ///==========================================================================
-    public static bool TryParseStringValueToEnum<TEnumType>(string stringValue, out TEnumType parsedValue) where TEnumType : struct, IConvertible
+    public static bool TryParseStringValueToEnum<TEnumType>(this string stringValue, out TEnumType parsedValue) where TEnumType : struct, IConvertible
     {
       Type enumType = typeof (TEnumType);
       if (!enumType.IsEnum)
