@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EnumStringValues_NET_STANDARD
+namespace EnumStringValues
 {
     ///==========================================================================
     /// Class : StringValueAttribute

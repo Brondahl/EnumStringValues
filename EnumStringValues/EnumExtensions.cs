@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-namespace EnumStringValues_NET_STANDARD
+namespace EnumStringValues
 {
     ///==========================================================================
     /// Class : EnumExtensions

@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumStringValueTests", "EnumStringValueTests\EnumStringValueTests.csproj", "{6A5C3CB5-9925-4D8C-84A5-F368FF4C5CFB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnumStringValues_NET_STANDARD", "EnumStringValues_NET_STANDARD\EnumStringValues_NET_STANDARD.csproj", "{EB9B3169-1860-4A12-B342-677ACCFFB64F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnumStringValues", "EnumStringValues\EnumStringValues.csproj", "{EB9B3169-1860-4A12-B342-677ACCFFB64F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
