@@ -53,8 +53,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnumStringValueTest.cs" />
-    <Compile Include="eTestEnum.cs" />
+    <Compile Include="EnumerateEnumValuesWorks.cs" />
+    <Compile Include="ParseStringThrows.cs" />
+    <Compile Include="GetMultipleStringValuesWorks.cs" />
+    <Compile Include="GetPreferredStringValuesWorks.cs" />
+    <Compile Include="GetSingleStringValueWorks.cs" />
+    <Compile Include="ParseStringWorks.cs" />
+    <Compile Include="ParseStringWorksAsAnExtensionMethodOnString.cs" />
+    <Compile Include="ParseStringWorksAsAnExtensionMethodOnStringEnumerations.cs" />
+    <Compile Include="TestEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿namespace EnumStringValues.Tests
 {
-    public enum eTestEnum
+    public enum TestEnum
     {
         Unlabelled,
 
