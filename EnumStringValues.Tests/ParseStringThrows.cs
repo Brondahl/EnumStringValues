@@ -1,6 +1,6 @@
 ﻿using System;
-using FluentAssertions;
 using NUnit.Framework;
+using FluentAssertions;
 
 namespace EnumStringValues.Tests
 {
@@ -54,7 +54,7 @@ namespace EnumStringValues.Tests
         public void AnExceptionWithTheExpectedText()
         {
             Action parseAttempt = (() => EnumExtensions.ParseStringValueToEnum<TestEnum>("InvalidStringValue"));
-            parseAttempt.ShouldThrow<Exception>().WithMessage("String does not match to any value of the specified Enum. Attempted to Parse InvalidStringValue into an Enum of type eTestEnum.");
+            parseAttempt.ShouldThrow<Exception>().WithMessage("String does not match to any value of the specified Enum. Attempted to Parse InvalidStringValue into an Enum of type TestEnum.");
         }
     }
 }
