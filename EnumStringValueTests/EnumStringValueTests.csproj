@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EnumStringValues\EnumStringValues.csproj">
-      <Project>{56fa5fb2-d017-43ec-b76a-fa5438323e31}</Project>
+      <Project>{ac42461a-a94c-4404-a82f-1eeea8a3ad44}</Project>
       <Name>EnumStringValues</Name>
     </ProjectReference>
   </ItemGroup>
