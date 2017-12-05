@@ -2,6 +2,22 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net35;net40;net451;net461</TargetFrameworks>
+    <AssemblyName>EnumStringValues</AssemblyName>
+    <PackageId>EnumStringValues</PackageId>
+    <PackageVersion>3.0</PackageVersion>
+    <Title>Enum String Values</Title>
+    <Authors>Brondahl</Authors>
+    <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/Brondahl/EnumStringValues</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>Library to allow conversion between an Enum Value and a string, in both directions.</Description>
+    <PackageReleaseNotes>
+    Version 3.0
+       - Convert the project to .Net Standard 2.0
+    </PackageReleaseNotes>
+    <Copyright>Copyright 2014</Copyright>
+    <PackageTags>Enum String StringValue EnumStringValue EnumStringValues</PackageTags>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>
