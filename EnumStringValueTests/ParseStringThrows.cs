@@ -11,14 +11,14 @@ namespace EnumStringValueTests
         [Test]
         public void WhenStringIsNull()
         {
-            Action parseAttempt = () => EnumExtensions.ParseStringValueToEnum<TestEnum>(null);
+            Action parseAttempt = () => EnumExtensions.ParseToEnum<TestEnum>(null);
             parseAttempt.ShouldThrow<ArgumentNullException>();
         }
 
         [Test]
         public void WhenStringIsUnmatched()
         {
-            Action parseAttempt = () => EnumExtensions.ParseStringValueToEnum<TestEnum>("InvalidStringValue");
+            Action parseAttempt = () => EnumExtensions.ParseToEnum<TestEnum>("InvalidStringValue");
             parseAttempt.ShouldThrow<UnmatchedStringValueException>();
         }
 
@@ -47,14 +47,14 @@ namespace EnumStringValueTests
         [Test]
         public void WhenTypePassedIntoParseIsNotAnEnum()
         {
-            Action parseAttempt = () => EnumExtensions.ParseStringValueToEnum<int>("IrrelevantStringValue");
+            Action parseAttempt = () => EnumExtensions.ParseToEnum<int>("IrrelevantStringValue");
             parseAttempt.ShouldThrow<InvalidOperationException>();
         }
 
         [Test]
         public void AnExceptionWithTheExpectedText()
         {
-            Action parseAttempt = () => EnumExtensions.ParseStringValueToEnum<TestEnum>("InvalidStringValue");
+            Action parseAttempt = () => EnumExtensions.ParseToEnum<TestEnum>("InvalidStringValue");
             parseAttempt.ShouldThrow<Exception>().WithMessage("String does not match to any value of the specified Enum. Attempted to Parse InvalidStringValue into an Enum of type TestEnum.");
         }
     }
