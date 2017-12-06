@@ -90,11 +90,6 @@ Methods
           If one exists, populates the out param and returns true. Otherwise returns false.
     EnumExtensions.EnumerateValues<T>()
         - Helper Method that returns all of the values in an EnumType.
-
-Deprecated
-    EnumExtensions.ParseStringValueToEnum<T>(string)
-        - Identical to ParseToEnum, but not exposed as an extension of string, and differently named.
-          Will be removed in the next major version. (If such a version ever happens)
 ```
 
 Exceptions and Edge Cases
