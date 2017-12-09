@@ -15,6 +15,7 @@
     <PackageReleaseNotes>
     Version 3.0
        - Convert the project to .Net Standard 2.0
+       - Remove the Obsolete `ParseStringValueToEnum` method. Please use `ParseToEnum`
     </PackageReleaseNotes>
     <Copyright>Copyright 2014</Copyright>
     <PackageTags>Enum String StringValue EnumStringValue EnumStringValues</PackageTags>
