@@ -90,11 +90,6 @@ Methods
           If one exists, populates the out param and returns true. Otherwise returns false.
     EnumExtensions.EnumerateValues<T>()
         - Helper Method that returns all of the values in an EnumType.
-
-Deprecated
-    EnumExtensions.ParseStringValueToEnum<T>(string)
-        - Identical to ParseToEnum, but not exposed as an extension of string, and differently named.
-          Will be removed in the next major version. (If such a version ever happens)
 ```
 
 Exceptions and Edge Cases
@@ -147,6 +142,8 @@ I'll attempt to document any feature requests I receive here, along with any des
 
 Version History
 ----------------
+
+- 3.0 - Convert the project to .Net Standard 2.0
 
 - 2.0  - Make the library use the existing Enum name as its default string value
        - Exposed the Parse methods as extensions on `String` and `List<string>`
@@ -218,6 +215,18 @@ Tried restart the bash prompt.
 
 Gave up and copied "id" key from work - works now (despite not registered with Pageant?)
 
+Creating a new Nuget Package
+-----
+With .Net Standard, you no longer have to use a nuspec file since all the package information is added to the csproj file.
+
+**Note:** Please make sure you have the latest version of Visual Studio 2017 and that MSBuild has been added to your path.
+
+- Update the [EnumStringValues.csproj](EnumStringValues/EnumStringValues.csproj) with any new information.
+  - For example, the new: `PackageVersion`, `PackageReleaseNotes`, etc.
+- Open your command line and navigate to the root `EnumStringValues` directory.
+- Run the NuGet CLI tool included in the project: `.\nuget\nuget.exe restore`
+- Use MSBuild to create the new NuGet package: `msbuild .\EnumStringValues\EnumStringValues.csproj /t:pack /p:Configuration=Release`
+  - The newly created package will be dropped in the `.\EnumStringValues\bin\Release\` directory.
 
 Nuget
 -----

@@ -104,25 +104,6 @@ namespace EnumStringValues
     }
 
     ///==========================================================================
-    /// Public Method : ParseStringValueToEnum
-    /// 
-    /// <summary>
-    ///   !!OBSOLETE!! Please use the identical 'ParseToEnum' method instead.
-    ///   Retrieves the Enum matching the string passed in.
-    ///   Throws if no match was found.
-    /// </summary>
-    /// <remarks>
-    ///   Duplicate of ParseToEnum{T} with original name to support backwards
-    ///   compatibility. Will be removed in a v3 (if that ever gets released)
-    /// </remarks>
-    ///==========================================================================
-    [Obsolete("Please use the identical 'ParseToEnum' method instead.")]
-    public static TEnumType ParseStringValueToEnum<TEnumType>(string stringValue) where TEnumType : struct, IConvertible
-    {
-      return ParseToEnum<TEnumType>(stringValue);
-    }
-
-    ///==========================================================================
     /// Public Extension Method on List{String}: ParseToEnumList
     /// 
     /// <summary>
