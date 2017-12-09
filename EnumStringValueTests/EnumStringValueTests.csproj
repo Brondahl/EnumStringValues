@@ -60,13 +60,13 @@
     <Compile Include="TestEnum.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EnumStringValues\EnumStringValues.csproj">
       <Project>{ac42461a-a94c-4404-a82f-1eeea8a3ad44}</Project>
       <Name>EnumStringValues</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
