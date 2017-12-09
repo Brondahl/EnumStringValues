@@ -5,6 +5,11 @@ Library to allow conversion between an Enum Value and a string, in both directio
 Implemented as an Attribute to be applied to Enum fields to define a string, and methods to extract the defined string given the enum or provide the matching given a string.
 Enum name is registered as a default stringValue everywhere.
 
+Breaking Change in latest Release (2.0 -> 3.0)
+----------------------------------------------
+The Deprecated `ParseStringValueToEnum` method has been removed. Please use `ParseToEnum` instead.
+
+
 Example Usage
 -------------
 
@@ -90,6 +95,11 @@ Methods
           If one exists, populates the out param and returns true. Otherwise returns false.
     EnumExtensions.EnumerateValues<T>()
         - Helper Method that returns all of the values in an EnumType.
+
+Removed
+    EnumExtensions.ParseStringValueToEnum<T>(string)
+        - This was identical to ParseToEnum, but not exposed as an extension of string, and differently named.
+          If you were using it, please now use ParseToEnum.
 ```
 
 Exceptions and Edge Cases
@@ -139,16 +149,19 @@ I'll attempt to document any feature requests I receive here, along with any des
   -	I don't know any way to improve on this, but any ideas are welcome.
  - Some sort of caching so that we're not reflecting all the time.
   - The mappings are compile time constants, so we should only really need to reflect on a given type once and there's no need to worry about cache invalidation etc, so should be fine.
+ - Further automation of nupkg handling ... can we get post-build events to handle archiving previous versions and copying the new version into the nuget folder?
+  - It would need to know the package version number, wouldn't it?
 
 Version History
 ----------------
 
 - 3.0 - Convert the project to .Net Standard 2.0
+       - Remove the Obsolete `ParseStringValueToEnum` method.
 
 - 2.0  - Make the library use the existing Enum name as its default string value
        - Exposed the Parse methods as extensions on `String` and `List<string>`
        - Added a clone of the basic Parse method renamed as `ParseToEnum<T>`
-       - NOTE: The old parse method (`ParseStringValueToEnum`) is now deprecated and will be removed in vNext. ParseToEnum is identical and should be used instead.
+       - NOTE: The old parse method (`ParseStringValueToEnum`) is now deprecated and will be removed in vNext. `ParseToEnum` is identical and should be used instead.
 
 - 1.0  - Final cosmetic tweaks. (Project is now essentially complete and this is likely the last update in a while)
 
@@ -219,25 +232,18 @@ Creating a new Nuget Package
 -----
 With .Net Standard, you no longer have to use a nuspec file since all the package information is added to the csproj file.
 
-**Note:** Please make sure you have the latest version of Visual Studio 2017 and that MSBuild has been added to your path.
+**Note:** Please make sure you have the latest version of Visual Studio 2017.
 
-- Update the [EnumStringValues.csproj](EnumStringValues/EnumStringValues.csproj) with any new information.
+- Update the [EnumStringValues.csproj](EnumStringValues/EnumStringValues.csproj) with any new information. This can also be done in the `package` tab of the project properties
   - For example, the new: `PackageVersion`, `PackageReleaseNotes`, etc.
-- Open your command line and navigate to the root `EnumStringValues` directory.
-- Run the NuGet CLI tool included in the project: `.\nuget\nuget.exe restore`
-- Use MSBuild to create the new NuGet package: `msbuild .\EnumStringValues\EnumStringValues.csproj /t:pack /p:Configuration=Release`
+  - new semantic version number
+  - release note tag (note no `<>` in here, use XML-escaped version instead - `&gt;`)
+- Update README.
+- Clean and Rebuild the solution, which will automatically package everything up for you.
   - The newly created package will be dropped in the `.\EnumStringValues\bin\Release\` directory.
+- Open new package with Nuget Package Explorer, explore to dll, open dll with reflector, verify updates have 'taken'.
+- Packages will be stored in `root\nuget`
+  - Move old nupkg to `OldPackages` folder
+  - Move (or copy) newly packed package, from the `bin\Release` folder where it was created, to `root\nuget`
 
-Nuget
------
-Update README.
-Update nuspec file
- - new semantic version number
- - release note tag (note no `<>` in here, use XML-escaped version instead - `&gt;`)
-Rebuild the solution (triggers update of .dll files in nuget folder)
-Save and commit etc. etc.
-I'm using a "convention based working directory" as described here: https://docs.nuget.org/create/creating-and-publishing-a-package
-Navigate to nuget directory.
-Run `nuget pack`.
-Move old package to 'Old' folder
-Open new package with Nuget Package Explorer, explore to dll, open dll with reflector, verify updates have 'taken'.
+  
