@@ -182,6 +182,11 @@ Dev Guide
 
 This section is *just* notes for myself - I don't do much remote-based git development from home, nor work much on this or on other nuget packages very often, so I usually forget most of what I've learned about getting the setup to workin-between updates. It may, or may not be valuable to anyone else who wants to contribute, but I'm not maintaining it with that in mind. Definitely feel free to add to this section if you think there are better ways to achieve the goals, but I'll be very picky about anything that removes information, for obvious reasons.
 
+README
+------
+The Nuget Documentation is markdown based, so pull through the higlights from this file and a reference to the GitHub page.
+Currently pulls through Summary, Breaking Changes, Example Usage and Version History.
+
 Git
 ---
 SSH ought to be being managed by Pageant?
