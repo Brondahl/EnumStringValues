@@ -146,11 +146,11 @@ Please email me with any requests that occur to you.
 I'll attempt to document any feature requests I receive here, along with any design thoughts or comments on whether they'll happen, etc.
 
  - Make the Generic "is an Enum" constraint more accurate.
-  -	I don't know any way to improve on this, but any ideas are welcome.
+    - I don't know any way to improve on this, but any ideas are welcome.
  - Some sort of caching so that we're not reflecting all the time.
-  - The mappings are compile time constants, so we should only really need to reflect on a given type once and there's no need to worry about cache invalidation etc, so should be fine.
+     - The mappings are compile time constants, so we should only really need to reflect on a given type once and there's no need to worry about cache invalidation etc, so should be fine.
  - Further automation of nupkg handling ... can we get post-build events to handle archiving previous versions and copying the new version into the nuget folder?
-  - It would need to know the package version number, wouldn't it?
+     - It would need to know the package version number, wouldn't it?
 
 Version History
 ----------------
