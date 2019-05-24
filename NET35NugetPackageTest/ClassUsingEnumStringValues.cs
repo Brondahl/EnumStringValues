@@ -11,6 +11,7 @@ namespace NET35NugetPackageTest
     {
       //.NET 3.5 doesn't support Fluent Assertions, apparently.
       Assert.That(Test.Entry.GetStringValue(), Is.EqualTo("Value"));
+      EnumExtensions.EnumerateValues<Test>();
     }
 
     public enum Test

@@ -11,6 +11,7 @@ namespace NET451NugetPackageTest
     public void IsFunctional()
     {
       Test.Entry.GetStringValue().Should().Be("Value");
+      EnumExtensions.EnumerateValues<Test>();
     }
 
     public enum Test
