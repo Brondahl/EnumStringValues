@@ -4,8 +4,8 @@
     <TargetFrameworks>netstandard2.0;net35;net40;net451;net461</TargetFrameworks>
     <AssemblyName>EnumStringValues</AssemblyName>
     <PackageId>EnumStringValues</PackageId>
-    <PackageVersion>3.0.1</PackageVersion>
-    <Version>3.0.1</Version>
+    <PackageVersion>3.1.0</PackageVersion>
+    <Version>3.1.0</Version>
     <Title>Enum String Values</Title>
     <Authors>Brondahl</Authors>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -13,9 +13,14 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>
     Library to allow conversion between an Enum Value and a string, in both directions.
-    v3.0.1 adds System.Enum constraint.
+    v3.1.0 adds opt-in Caching.
     See nuget for full version history</Description>
     <PackageReleaseNotes>
+    Version 3.1.0
+       - Add option of caching all work done from all end points.
+          - Caching is opt-in; accessed by setting EnumExtensions.Behaviour.UseCaching = true.
+          - Caching is NOT thread-safe (to maintain .NET 3.5 support)
+          - Thread-safety will be added in v4.0
     Version 3.0.1
        - Update codebase to C# 7.3 and thus add System.Enum constraints on all typed methods.
           - Only impact should be to convert run-time errors into compile-time errors
