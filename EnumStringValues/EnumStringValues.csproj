@@ -21,6 +21,8 @@
     <PackageTags>Enum String StringValue EnumStringValue EnumStringValues</PackageTags>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <LangVersion>7.3</LangVersion>
+    <NeutralLanguage></NeutralLanguage>
   </PropertyGroup>
 
 </Project>
