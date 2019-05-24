@@ -4,6 +4,7 @@ EnumStringValues
 Library to allow conversion between an Enum Value and a string, in both directions.
 Implemented as an Attribute to be applied to Enum fields to define a string, and methods to extract the defined string given the enum or provide the matching given a string.
 Enum name is registered as a default stringValue everywhere.
+All reflection operations can be cached, by actively enabling this feature, with EnumExtensions.Behaviour.UseCaching
 
 Breaking Change in latest Release (2.0 -> 3.0)
 ----------------------------------------------
@@ -53,6 +54,17 @@ exampleEnum.EnumWithMultipleStringValueDefinedAndOneMarkedAsPreferred.GetStringV
 
 ("Two").ParseToEnum<exampleEnum>()
                // also returns exampleEnum.EnumWithMultipleStringValuesDefinedAndOneMarkedAsPreferred
+
+
+/* Enable Caching. */
+EnumExtensions.Behaviour.UseCaching = true;
+("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()
+               // Does Work
+("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()
+               // Does not do Work, as result is already cached.
+EnumExtensions.Behaviour.UseCaching = false;
+("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()
+               // Returns to doing Work again
 ```
 
 Classes, Methods, etc.
@@ -145,16 +157,21 @@ Feature Requests
 Please email me with any requests that occur to you.
 I'll attempt to document any feature requests I receive here, along with any design thoughts or comments on whether they'll happen, etc.
 
- - Make the Generic "is an Enum" constraint more accurate.
-    - I don't know any way to improve on this, but any ideas are welcome.
- - Some sort of caching so that we're not reflecting all the time.
-     - The mappings are compile time constants, so we should only really need to reflect on a given type once and there's no need to worry about cache invalidation etc, so should be fine.
  - Further automation of nupkg handling ... can we get post-build events to handle archiving previous versions and copying the new version into the nuget folder?
      - It would need to know the package version number, wouldn't it?
 
 Version History
 ----------------
 
+- 3.1.0
+       - Add option of caching all work done from all end points.
+          - Caching is opt-in; accessed by setting EnumExtensions.Behaviour.UseCaching = true.
+          - Caching is NOT thread-safe (to maintain .NET 3.5 support)
+          - Thread-safety will be added in v4.0
+- 3.0.1
+       - Update codebase to C# 7.3 and thus add System.Enum constraints on all typed methods.
+          - Only impact should be to convert run-time errors into compile-time errors
+          
 - 3.0 - Convert the project to .Net Standard 2.0
        - Remove the Obsolete `ParseStringValueToEnum` method.
 
