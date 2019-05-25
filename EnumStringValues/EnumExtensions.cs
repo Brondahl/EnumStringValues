@@ -13,6 +13,24 @@ namespace EnumStringValues
   ///==========================================================================
   public static class EnumExtensions
   {
+    /// <summary>
+    /// Controls whether Caching should be used. Defaults to false.
+    /// </summary>
+    public static bool UseCaching = false;
+
+    static EnumExtensions() { ResetCaches(); }
+
+    /// <summary>
+    /// Method for use in testing.
+    /// Needs to be public to be used in the test project.
+    /// Not a problem to expose to the user, but never valuable (as long as the tests pass :) )
+    /// So won't be documented and will be hidden from Intellisense.
+    /// </summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public static void ResetCaches()
+    {
+    }
+
     public static IEnumerable<TEnumType> EnumerateValues<TEnumType>() where TEnumType : System.Enum
     {
       return Enum.GetValues(typeof(TEnumType)).Cast<TEnumType>();
