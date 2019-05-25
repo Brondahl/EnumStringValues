@@ -82,6 +82,22 @@ namespace EnumStringValueTests
                 EnumExtensions.ParseToEnum<TestEnum>("Four").Should().Be(TestEnum.MultiDefinedWithPreferences);
             }
 
+            [Test, Repeat(50)]
+            public void FasterWithCaching()
+            {
+              var reps = 500;
+
+              EnumExtensions.ResetCaches();
+              EnumExtensions.UseCaching = false;
+              double rawTime = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
+
+              EnumExtensions.ResetCaches();
+              EnumExtensions.UseCaching = true;
+              double cachedTime = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
+
+              (cachedTime / rawTime).Should().BeLessThan(0.1f);
+            }
+
             [Test, Repeat(10)]
             public void ButIsSlowerForLaterEnumsWhenNotCaching()
             {
