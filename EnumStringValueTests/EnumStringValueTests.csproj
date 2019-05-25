@@ -48,6 +48,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RunAllTestsWithAndWithoutCaching.cs" />
     <Compile Include="EnumerateEnumValuesWorks.cs" />
     <Compile Include="ParseStringThrows.cs" />
     <Compile Include="GetMultipleStringValuesWorks.cs" />

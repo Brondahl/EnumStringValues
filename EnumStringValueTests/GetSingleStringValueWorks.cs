@@ -4,11 +4,10 @@ using FluentAssertions;
 
 namespace EnumStringValueTests
 {
-    public partial class EnumStringValueTest
-    {
-        [TestFixture]
-        public class GetSingleStringValueWorks
+        public class GetSingleStringValueWorks : EnumStringValueTestBase
         {
+            public GetSingleStringValueWorks(bool arg) : base(arg) {}
+
             [Test]
             public void InUndefinedCases()
             {
@@ -33,5 +32,4 @@ namespace EnumStringValueTests
                 TestEnum.MultiDefined.GetStringValue().Should().BeOneOf("3", "Three");
             }
         }
-    }
 }
