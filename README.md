@@ -242,12 +242,13 @@ With .Net Standard, you no longer have to use a nuspec file since all the packag
 - Update the [EnumStringValues.csproj](EnumStringValues/EnumStringValues.csproj) with any new information. This can also be done in the `package` tab of the project properties
   - For example, the new: `PackageVersion`, `PackageReleaseNotes`, etc.
   - new semantic version number
+  - needs an additional manual update int .csproj file, as the VS UI appears to be buggy
   - release note tag (note no `<>` in here, use XML-escaped version instead - `&gt;`)
 - Update README.
 - Clean and Rebuild the solution, which will automatically package everything up for you.
   - The newly created package will be dropped in the `.\EnumStringValues\bin\Release\` directory.
 - Open new package with Nuget Package Explorer, explore to dll, open dll with reflector, verify updates have 'taken'.
-- Packages will be stored in `root\nuget`
+- Packages should be stored in `root\nuget`
   - Move old nupkg to `OldPackages` folder
   - Move (or copy) newly packed package, from the `bin\Release` folder where it was created, to `root\nuget`
 
