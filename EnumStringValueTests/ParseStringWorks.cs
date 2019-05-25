@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using NUnit.Framework;
 using EnumStringValues;
 using FluentAssertions;
 
@@ -77,6 +80,25 @@ namespace EnumStringValueTests
                 EnumExtensions.ParseToEnum<TestEnum>("4").Should().Be(TestEnum.MultiDefinedWithPreferences);
                 EnumExtensions.ParseToEnum<TestEnum>("Four").Should().Be(TestEnum.MultiDefinedWithPreferences);
                 EnumExtensions.ParseToEnum<TestEnum>("Four").Should().Be(TestEnum.MultiDefinedWithPreferences);
+            }
+
+            [Test, Repeat(10)]
+            public void ButIsSlowerForLaterEnumsWhenNotCaching()
+            {
+                EnumExtensions.ResetCaches();
+                EnumExtensions.UseCaching = false;
+                var reps = 250;
+                var fast = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
+                var slow = TimeParsingStringForEnum(TestEnum.EnumValueWithLotsOfEnumsBeforeIt, reps);
+
+                slow.Should().BeGreaterThan(fast * 5);
+            }
+
+            public long TimeParsingStringForEnum(TestEnum expectedEnum, int reps)
+            {
+                var label = expectedEnum.GetStringValue();
+
+                return Timer.Time(label.ParseToEnum<TestEnum>, reps);
             }
         }
 }
