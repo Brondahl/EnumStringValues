@@ -13,7 +13,7 @@ namespace EnumStringValues
   ///==========================================================================
   public static class EnumExtensions
   {
-    public static IEnumerable<TEnumType> EnumerateValues<TEnumType>()
+    public static IEnumerable<TEnumType> EnumerateValues<TEnumType>() where TEnumType : System.Enum
     {
       return Enum.GetValues(typeof(TEnumType)).Cast<TEnumType>();
     }
@@ -92,7 +92,7 @@ namespace EnumStringValues
     ///   them at compile time.
     /// </remarks>
     ///==========================================================================
-    public static TEnumType ParseToEnum<TEnumType>(this string stringValue) where TEnumType : struct, IConvertible
+    public static TEnumType ParseToEnum<TEnumType>(this string stringValue) where TEnumType : System.Enum
     {
         TEnumType lRet;
         // ReSharper disable once RedundantTypeArgumentsOfMethod
@@ -116,7 +116,7 @@ namespace EnumStringValues
     ///   failure if any values aren't matched.
     /// </remarks>
     ///==========================================================================
-    public static List<TEnumType> ParseToEnumList<TEnumType>(this IEnumerable<string> stringValueCollection) where TEnumType : struct, IConvertible
+    public static List<TEnumType> ParseToEnumList<TEnumType>(this IEnumerable<string> stringValueCollection) where TEnumType : System.Enum
     {
         return stringValueCollection.Select(ParseToEnum<TEnumType>).ToList();
     }
@@ -136,14 +136,8 @@ namespace EnumStringValues
     ///   them at compile time.
     /// </remarks>
     ///==========================================================================
-    public static bool TryParseStringValueToEnum<TEnumType>(this string stringValue, out TEnumType parsedValue) where TEnumType : struct, IConvertible
+    public static bool TryParseStringValueToEnum<TEnumType>(this string stringValue, out TEnumType parsedValue) where TEnumType : System.Enum
     {
-      Type enumType = typeof (TEnumType);
-      if (!enumType.IsEnum)
-      {
-        throw new InvalidOperationException("Type was not an Enum type.");
-      }
-
       if (stringValue == null)
       {
         throw new ArgumentNullException("stringValue", "Input string may not be null.");
@@ -181,7 +175,7 @@ namespace EnumStringValues
     ///   them at compile time.
     /// </remarks>
     ///==========================================================================
-    private static IEnumerable<string> GetStringValues<TEnumType>(TEnumType enumValue) where TEnumType : struct, IConvertible
+    private static IEnumerable<string> GetStringValues<TEnumType>(TEnumType enumValue) where TEnumType : System.Enum
     {
       // ReSharper disable once SuspiciousTypeConversion.Global
       // ReSharper disable once ExpressionIsAlwaysNull

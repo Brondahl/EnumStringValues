@@ -37,21 +37,6 @@ namespace EnumStringValueTests
         }
 
         [Test]
-        public void WhenTypePassedIntoTryParseIsNotAnEnum()
-        {
-            int x;
-            Action parseAttempt = () => EnumExtensions.TryParseStringValueToEnum<int>("IrrelevantStringValue", out x);
-            parseAttempt.ShouldThrow<InvalidOperationException>();
-        }
-
-        [Test]
-        public void WhenTypePassedIntoParseIsNotAnEnum()
-        {
-            Action parseAttempt = () => EnumExtensions.ParseToEnum<int>("IrrelevantStringValue");
-            parseAttempt.ShouldThrow<InvalidOperationException>();
-        }
-
-        [Test]
         public void AnExceptionWithTheExpectedText()
         {
             Action parseAttempt = () => EnumExtensions.ParseToEnum<TestEnum>("InvalidStringValue");

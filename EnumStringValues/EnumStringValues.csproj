@@ -4,15 +4,21 @@
     <TargetFrameworks>netstandard2.0;net35;net40;net451;net461</TargetFrameworks>
     <AssemblyName>EnumStringValues</AssemblyName>
     <PackageId>EnumStringValues</PackageId>
-    <PackageVersion>3.0.0</PackageVersion>
-    <Version>3.0.0</Version>
+    <PackageVersion>3.0.1</PackageVersion>
+    <Version>3.0.1</Version>
     <Title>Enum String Values</Title>
     <Authors>Brondahl</Authors>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/Brondahl/EnumStringValues</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>Library to allow conversion between an Enum Value and a string, in both directions.</Description>
+    <Description>
+    Library to allow conversion between an Enum Value and a string, in both directions.
+    v3.0.1 adds System.Enum constraint.
+    See nuget for full version history</Description>
     <PackageReleaseNotes>
+    Version 3.0.1
+       - Update codebase to C# 7.3 and thus add System.Enum constraints on all typed methods.
+          - Only impact should be to convert run-time errors into compile-time errors
     Version 3.0
        - Convert the project to .Net Standard 2.0
        - Remove the Obsolete `ParseStringValueToEnum` method. Please use `ParseToEnum`
@@ -21,6 +27,8 @@
     <PackageTags>Enum String StringValue EnumStringValue EnumStringValues</PackageTags>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <LangVersion>7.3</LangVersion>
+    <NeutralLanguage></NeutralLanguage>
   </PropertyGroup>
 
 </Project>
