@@ -73,5 +73,26 @@ namespace EnumStringValueTests
               TestEnum_Secondary.SingleDefined.GetStringValue().Should().Be("3");
               TestEnum.SingleDefined.GetStringValue().Should().Be("1");
             }
+
+            [Test, Repeat(10)]
+            public void FasterWithCaching()
+            {
+              var reps = 20000;
+
+              EnumExtensions.ResetCaches();
+              EnumExtensions.UseCaching = false;
+              double rawTime = TimeFetchingStringForEnum(TestEnum.SingleDefined, reps);
+
+              EnumExtensions.ResetCaches();
+              EnumExtensions.UseCaching = true;
+              double cachedTime = TimeFetchingStringForEnum(TestEnum.SingleDefined, reps);
+
+              (cachedTime / rawTime).Should().BeLessThan(0.2f);
+            }
+
+            public long TimeFetchingStringForEnum(TestEnum expectedEnum, int reps)
+            {
+                return Timer.Time(() => expectedEnum.GetStringValue(), reps);
+            }
         }
 }

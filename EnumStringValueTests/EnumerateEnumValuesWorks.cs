@@ -1,5 +1,6 @@
 ﻿using EnumStringValues;
 using NUnit.Framework;
+using FluentAssertions;
 
 namespace EnumStringValueTests
 {
@@ -80,6 +81,27 @@ namespace EnumStringValueTests
                 CollectionAssert.AreEquivalent(expectedValuesInSecondaryEnum, enumeration1Returned);
                 CollectionAssert.AreEquivalent(expectedValuesInTestEnum, enumeration2Returned);
                 CollectionAssert.AreEquivalent(expectedValuesInSecondaryEnum, enumeration1ReturnedAgain);
+            }
+
+            [Test, Repeat(50)]
+            public void FasterWithCaching()
+            {
+                var reps = 10000;
+
+                EnumExtensions.ResetCaches();
+                EnumExtensions.UseCaching = false;
+                double rawTime = TimeEnumeratingEnumValues<TestEnum>(reps);
+
+                EnumExtensions.ResetCaches();
+                EnumExtensions.UseCaching = true;
+                double cachedTime = TimeEnumeratingEnumValues<TestEnum>(reps);
+
+                (cachedTime / rawTime).Should().BeLessThan(0.1f);
+            }
+
+            public long TimeEnumeratingEnumValues<TEnumType>(int reps) where TEnumType : System.Enum
+            {
+                return Timer.Time(EnumExtensions.EnumerateValues<TEnumType>, reps);
             }
     }
 }
