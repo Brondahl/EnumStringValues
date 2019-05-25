@@ -12,6 +12,9 @@ namespace EnumStringValues
   [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
   public class StringValueAttribute : Attribute
   {
+    /// <summary>
+    ///   This attribute is used to represent a string value for a value in an enum.
+    /// </summary>
     public StringValueAttribute(string value, bool preferred = false)
       : this(value, preferred ? PreferenceLevel.High : PreferenceLevel.Default) 
     {
@@ -34,14 +37,14 @@ namespace EnumStringValues
     Low = 2
   }
 
+  /// <summary>
+  /// Exception to represent the error case in which we have been asked to parse a string, and that string is entirely unrecognised.
+  /// </summary>
   public class UnmatchedStringValueException : Exception
   {
+    /// <inheritdoc />
     public UnmatchedStringValueException(string value, Type type)
-      : base(
-          string.Format(
-          "String does not match to any value of the specified Enum. Attempted to Parse {0} into an Enum of type {1}.",
-          value, type.Name)
-            )
+      : base($"String does not match to any value of the specified Enum. Attempted to Parse {value} into an Enum of type {type.Name}.")
     {}
   }
 }

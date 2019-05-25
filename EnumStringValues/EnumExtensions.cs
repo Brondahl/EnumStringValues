@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+// ReSharper disable RedundantTypeArgumentsOfMethod
+#pragma warning disable IDE0034 // Simplify 'default' expression
 
 
 namespace EnumStringValues
@@ -45,6 +47,7 @@ namespace EnumStringValues
     /// <summary> Cache for <see cref="EnumerateValues{TEnumType}"/> </summary>
     private static Dictionary<Type, IEnumerable> enumValuesDictionary;
 
+    /// <summary> Returns an IEnumerable{T} of the possible values in the enum </summary>
     public static IEnumerable<TEnumType> EnumerateValues<TEnumType>() where TEnumType : System.Enum
     {
       var enumTypeObject = typeof(TEnumType);
@@ -117,7 +120,7 @@ namespace EnumStringValues
     ///==========================================================================
     private static IEnumerable<StringValueAttribute> GetStringValuesWithPreferences(this Enum enumValue)
     {
-      List<StringValueAttribute> stringValueAttributes = null;
+      List<StringValueAttribute> stringValueAttributes;
 
       if (Behaviour.UseCaching)
       {
@@ -162,9 +165,8 @@ namespace EnumStringValues
     ///==========================================================================
     public static TEnumType ParseToEnum<TEnumType>(this string stringValue) where TEnumType : System.Enum
     {
-        TEnumType lRet;
         // ReSharper disable once RedundantTypeArgumentsOfMethod
-        if (TryParseStringValueToEnum<TEnumType>(stringValue, out lRet))
+        if (TryParseStringValueToEnum<TEnumType>(stringValue, out TEnumType lRet))
         {
           return lRet;
         }
@@ -258,7 +260,6 @@ namespace EnumStringValues
     {
       foreach (var enumValue in EnumerateValues<TEnumType>())
       {
-       // ReSharper disable once RedundantTypeArgumentsOfMethod
         var enumStrings = GetStringValues<TEnumType>(enumValue).Select(text => text.ToLower());
         var inputString = stringValue.ToLower();
 
@@ -290,9 +291,8 @@ namespace EnumStringValues
     ///==========================================================================
     private static IEnumerable<string> GetStringValues<TEnumType>(TEnumType enumValue) where TEnumType : System.Enum
     {
-      // ReSharper disable once SuspiciousTypeConversion.Global
-      // ReSharper disable once ExpressionIsAlwaysNull
       return (enumValue as Enum).GetAllStringValues();
     }
   }
 }
+#pragma warning restore IDE0034 // Simplify 'default' expression
