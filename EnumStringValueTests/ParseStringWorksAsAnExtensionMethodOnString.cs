@@ -4,11 +4,10 @@ using FluentAssertions;
 
 namespace EnumStringValueTests
 {
-    public partial class EnumStringValueTest
-    {
-        [TestFixture]
-        public class ParseStringWorksAsAnExtensionMethodOnString
+        public class ParseStringWorksAsAnExtensionMethodOnString :  EnumStringValueTestBase
         {
+            public ParseStringWorksAsAnExtensionMethodOnString(bool arg) : base(arg) { }
+
             [Test]
             public void InDefaultCase()
             {
@@ -48,5 +47,4 @@ namespace EnumStringValueTests
                 "fOur".ParseToEnum<TestEnum>().Should().Be(TestEnum.MultiDefinedWithPreferences);
             }
         }
-    }
 }

@@ -4,11 +4,10 @@ using FluentAssertions;
 
 namespace EnumStringValueTests
 {
-    public partial class EnumStringValueTest
-    {
-        [TestFixture]
-        public class GetPreferredStringValuesWorks
+        public class GetPreferredStringValuesWorks :  EnumStringValueTestBase
         {
+            public GetPreferredStringValuesWorks(bool arg) : base(arg) { }
+
             [Test]
             public void InSingleDefinedCasesWithPreferences()
             {
@@ -27,5 +26,4 @@ namespace EnumStringValueTests
                 TestEnum.MultiDefinedWithMultiplePreferences.GetStringValue().Should().BeOneOf("5", "Five");
             }
         }
-    }
 }

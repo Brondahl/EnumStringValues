@@ -3,11 +3,10 @@ using EnumStringValues;
 
 namespace EnumStringValueTests
 {
-    public partial class EnumStringValueTest
+    public class EnumerateEnumValuesWorks :  EnumStringValueTestBase
     {
-        [TestFixture]
-        public class EnumerateEnumValuesWorks
-        {
+            public EnumerateEnumValuesWorks(bool arg) : base(arg) { }
+
             [Test]
             public void InGeneral()
             {
@@ -24,6 +23,5 @@ namespace EnumStringValueTests
 
                 CollectionAssert.AreEquivalent(explicitEnumeration, enumerationReturned);
             }
-        }
     }
 }
