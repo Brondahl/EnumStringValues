@@ -88,10 +88,22 @@ namespace EnumStringValueTests
                 EnumExtensions.ResetCaches();
                 EnumExtensions.UseCaching = false;
                 var reps = 250;
-                var fast = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
-                var slow = TimeParsingStringForEnum(TestEnum.EnumValueWithLotsOfEnumsBeforeIt, reps);
+                double fast = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
+                double slow = TimeParsingStringForEnum(TestEnum.EnumValueWithLotsOfEnumsBeforeIt, reps);
 
-                slow.Should().BeGreaterThan(fast * 5);
+                (slow / fast).Should().BeGreaterThan(5f);
+            }
+
+            [Test, Repeat(10)]
+            public void ButIsNotSlowerForLaterEnumsWhenCachingIsActive()
+            {
+              EnumExtensions.ResetCaches();
+              EnumExtensions.UseCaching = true;
+              int reps = 500000;
+              double fast = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
+              double notSlow = TimeParsingStringForEnum(TestEnum.EnumValueWithLotsOfEnumsBeforeIt, reps);
+
+              (notSlow / fast).Should().BeLessThan(1.3f);
             }
 
             public long TimeParsingStringForEnum(TestEnum expectedEnum, int reps)
