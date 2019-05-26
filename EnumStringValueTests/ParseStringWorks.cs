@@ -46,5 +46,37 @@ namespace EnumStringValueTests
             {
                 EnumExtensions.ParseToEnum<TestEnum>("fOur").Should().Be(TestEnum.MultiDefinedWithPreferences);
             }
+
+            [Test]
+            public void WithNoWeirdCachingBugs1()
+            {
+                EnumExtensions.ResetCaches();
+
+                EnumExtensions.ParseToEnum<TestEnum>("Four").Should().Be(TestEnum.MultiDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("Four").Should().Be(TestEnum.MultiDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("4").Should().Be(TestEnum.MultiDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("5").Should().Be(TestEnum.MultiDefinedWithMultiplePreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("4").Should().Be(TestEnum.MultiDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("5").Should().Be(TestEnum.MultiDefinedWithMultiplePreferences);
+                EnumExtensions.ParseToEnum<TestEnum_Secondary>("4").Should().Be(TestEnum_Secondary.SingleDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("4").Should().Be(TestEnum.MultiDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum_Secondary>("Four").Should().Be(TestEnum_Secondary.MultiDefined);
+            }
+
+            [Test]
+            public void WithNoWeirdCachingBugs2()
+            {
+                EnumExtensions.ResetCaches();
+
+                EnumExtensions.ParseToEnum<TestEnum_Secondary>("Four").Should().Be(TestEnum_Secondary.MultiDefined);
+                EnumExtensions.ParseToEnum<TestEnum>("4").Should().Be(TestEnum.MultiDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum_Secondary>("4").Should().Be(TestEnum_Secondary.SingleDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("5").Should().Be(TestEnum.MultiDefinedWithMultiplePreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("4").Should().Be(TestEnum.MultiDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("5").Should().Be(TestEnum.MultiDefinedWithMultiplePreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("4").Should().Be(TestEnum.MultiDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("Four").Should().Be(TestEnum.MultiDefinedWithPreferences);
+                EnumExtensions.ParseToEnum<TestEnum>("Four").Should().Be(TestEnum.MultiDefinedWithPreferences);
+            }
         }
 }
