@@ -53,7 +53,7 @@ namespace EnumStringValueTests
             [Test]
             public void WithNoWeirdCachingBugs1()
             {
-                EnumExtensions.ResetCaches();
+                EnumExtensions.Behaviour.ResetCaches();
 
                 EnumExtensions.ParseToEnum<TestEnum>("Four").Should().Be(TestEnum.MultiDefinedWithPreferences);
                 EnumExtensions.ParseToEnum<TestEnum>("Four").Should().Be(TestEnum.MultiDefinedWithPreferences);
@@ -69,7 +69,7 @@ namespace EnumStringValueTests
             [Test]
             public void WithNoWeirdCachingBugs2()
             {
-                EnumExtensions.ResetCaches();
+                EnumExtensions.Behaviour.ResetCaches();
 
                 EnumExtensions.ParseToEnum<TestEnum_Secondary>("Four").Should().Be(TestEnum_Secondary.MultiDefined);
                 EnumExtensions.ParseToEnum<TestEnum>("4").Should().Be(TestEnum.MultiDefinedWithPreferences);
@@ -87,12 +87,12 @@ namespace EnumStringValueTests
             {
               var reps = 500;
 
-              EnumExtensions.ResetCaches();
-              EnumExtensions.UseCaching = false;
+              EnumExtensions.Behaviour.ResetCaches();
+              EnumExtensions.Behaviour.UseCaching = false;
               double rawTime = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
 
-              EnumExtensions.ResetCaches();
-              EnumExtensions.UseCaching = true;
+              EnumExtensions.Behaviour.ResetCaches();
+              EnumExtensions.Behaviour.UseCaching = true;
               double cachedTime = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
 
               (cachedTime / rawTime).Should().BeLessThan(0.1f);
@@ -101,8 +101,8 @@ namespace EnumStringValueTests
             [Test, Repeat(10)]
             public void ButIsSlowerForLaterEnumsWhenNotCaching()
             {
-                EnumExtensions.ResetCaches();
-                EnumExtensions.UseCaching = false;
+                EnumExtensions.Behaviour.ResetCaches();
+                EnumExtensions.Behaviour.UseCaching = false;
                 var reps = 250;
                 double fast = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
                 double slow = TimeParsingStringForEnum(TestEnum.EnumValueWithLotsOfEnumsBeforeIt, reps);
@@ -113,8 +113,8 @@ namespace EnumStringValueTests
             [Test, Repeat(10)]
             public void ButIsNotSlowerForLaterEnumsWhenCachingIsActive()
             {
-              EnumExtensions.ResetCaches();
-              EnumExtensions.UseCaching = true;
+              EnumExtensions.Behaviour.ResetCaches();
+              EnumExtensions.Behaviour.UseCaching = true;
               int reps = 500000;
               double fast = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
               double notSlow = TimeParsingStringForEnum(TestEnum.EnumValueWithLotsOfEnumsBeforeIt, reps);

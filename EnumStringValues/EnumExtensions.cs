@@ -15,25 +15,31 @@ namespace EnumStringValues
   ///==========================================================================
   public static class EnumExtensions
   {
-    /// <summary>
-    /// Controls whether Caching should be used. Defaults to false.
-    /// </summary>
-    public static bool UseCaching = false;
-
-    static EnumExtensions() { ResetCaches(); }
-
-    /// <summary>
-    /// Method for use in testing.
-    /// Needs to be public to be used in the test project.
-    /// Not a problem to expose to the user, but never valuable (as long as the tests pass :) )
-    /// So won't be documented and will be hidden from Intellisense.
-    /// </summary>
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public static void ResetCaches()
+    public static class Behaviour
     {
-      enumValuesDictionary = new Dictionary<Type, IEnumerable>();
-      enumStringValuesDictionary = new Dictionary<Enum, List<StringValueAttribute>>();
-      parsedEnumStringsDictionaryByType = new Dictionary<Type, Dictionary<string, Enum>>();
+      /// <summary>
+      /// Controls whether Caching should be used. Defaults to false.
+      /// </summary>
+      public static bool UseCaching = false;
+
+      static Behaviour()
+      {
+        ResetCaches();
+      }
+
+      /// <summary>
+      /// Method for use in testing.
+      /// Needs to be public to be used in the test project.
+      /// Not a problem to expose to the user, but never valuable (as long as the tests pass :) )
+      /// So won't be documented and will be hidden from Intellisense.
+      /// </summary>
+      [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+      public static void ResetCaches()
+      {
+        enumValuesDictionary = new Dictionary<Type, IEnumerable>();
+        enumStringValuesDictionary = new Dictionary<Enum, List<StringValueAttribute>>();
+        parsedEnumStringsDictionaryByType = new Dictionary<Type, Dictionary<string, Enum>>();
+      }
     }
 
     /// <summary> Cache for <see cref="EnumerateValues{TEnumType}"/> </summary>
@@ -44,7 +50,7 @@ namespace EnumStringValues
       var enumTypeObject = typeof(TEnumType);
       IEnumerable values;
 
-      if (UseCaching)
+      if (Behaviour.UseCaching)
       {
         if (!enumValuesDictionary.TryGetValue(enumTypeObject, out values))
         {
@@ -113,7 +119,7 @@ namespace EnumStringValues
     {
       List<StringValueAttribute> stringValueAttributes = null;
 
-      if (UseCaching)
+      if (Behaviour.UseCaching)
       {
         if (enumStringValuesDictionary.TryGetValue(enumValue, out stringValueAttributes))
         {
@@ -129,7 +135,7 @@ namespace EnumStringValues
               .DefaultIfEmpty(new StringValueAttribute(enumValue.ToString(), PreferenceLevel.Low))
               .ToList();
 
-      if (UseCaching)
+      if (Behaviour.UseCaching)
       {
         enumStringValuesDictionary.Add(enumValue, stringValueAttributes);
       }
@@ -205,7 +211,7 @@ namespace EnumStringValues
         throw new ArgumentNullException(nameof(stringValue), "Input string may not be null.");
       }
 
-      if (!UseCaching)
+      if (!Behaviour.UseCaching)
       {
         return TryParseStringValueToEnum_Uncached(stringValue, out parsedValue);
       }

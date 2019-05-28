@@ -35,7 +35,7 @@ namespace EnumStringValueTests
             [Test]
             public void WithNoWeirdCachingBugs()
             {
-              EnumExtensions.ResetCaches();
+              EnumExtensions.Behaviour.ResetCaches();
 
               TestEnum.SingleDefined.GetStringValue().Should().Be("1");
               TestEnum_Secondary.SingleDefined.GetStringValue().Should().Be("3");
@@ -49,7 +49,7 @@ namespace EnumStringValueTests
             [Test]
             public void WithNoWeirdCachingBugs2()
             {
-              EnumExtensions.ResetCaches();
+              EnumExtensions.Behaviour.ResetCaches();
 
               TestEnum_Secondary.SingleDefined.GetStringValue().Should().Be("3");
               TestEnum.SingleDefined.GetStringValue().Should().Be("1");
@@ -63,7 +63,7 @@ namespace EnumStringValueTests
             [Test]
             public void WithNoWeirdCachingBugs3()
             {
-              EnumExtensions.ResetCaches();
+              EnumExtensions.Behaviour.ResetCaches();
 
               TestEnum_Secondary.MultiDefined.GetStringValue().Should().Be("1");
               TestEnum_Secondary.SingleDefined.GetStringValue().Should().Be("3");
@@ -79,12 +79,12 @@ namespace EnumStringValueTests
             {
               var reps = 20000;
 
-              EnumExtensions.ResetCaches();
-              EnumExtensions.UseCaching = false;
+              EnumExtensions.Behaviour.ResetCaches();
+              EnumExtensions.Behaviour.UseCaching = false;
               double rawTime = TimeFetchingStringForEnum(TestEnum.SingleDefined, reps);
 
-              EnumExtensions.ResetCaches();
-              EnumExtensions.UseCaching = true;
+              EnumExtensions.Behaviour.ResetCaches();
+              EnumExtensions.Behaviour.UseCaching = true;
               double cachedTime = TimeFetchingStringForEnum(TestEnum.SingleDefined, reps);
 
               (cachedTime / rawTime).Should().BeLessThan(0.2f);

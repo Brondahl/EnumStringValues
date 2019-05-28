@@ -16,8 +16,8 @@ namespace EnumStringValueTests
     [SetUp]
     public void ResetCaching()
     {
-      EnumExtensions.ResetCaches();
-      EnumExtensions.UseCaching = cachingActiveByDefault;
+      EnumExtensions.Behaviour.ResetCaches();
+      EnumExtensions.Behaviour.UseCaching = cachingActiveByDefault;
     }
   }
 }
