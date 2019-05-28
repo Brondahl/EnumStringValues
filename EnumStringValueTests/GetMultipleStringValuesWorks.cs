@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using EnumStringValues;
 using FluentAssertions;
+using static EnumStringValues.EnumExtensions.Behaviour;
 
 namespace EnumStringValueTests
 {
@@ -8,22 +10,68 @@ namespace EnumStringValueTests
   {
     public GetMultipleStringValuesWorks(bool arg) : base(arg) {}
 
-    [Test]
-    public void InSingleDefinedCases()
+    [Test,
+     TestCase(UnderlyingNameUsed.Always, true),
+     TestCase(UnderlyingNameUsed.IfNoOverrideGiven, false),
+     TestCase(UnderlyingNameUsed.Never, false)]
+    public void InSingleDefinedCases(UnderlyingNameUsed shouldUse, bool includeLiteral)
     {
-      TestEnum.SingleDefined.GetAllStringValues().Should().BeEquivalentTo("1");
+      EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = shouldUse;
+      var expectedCollection = new List<string>{"1"};
+      if (includeLiteral)
+      {
+        expectedCollection.Add(nameof(TestEnum.SingleDefined));
+      }
+
+      TestEnum.SingleDefined.GetAllStringValues().Should().BeEquivalentTo(expectedCollection);
     }
 
-    [Test]
-    public void InMultiDefinedCases()
+    [Test,
+     TestCase(UnderlyingNameUsed.Always, true),
+     TestCase(UnderlyingNameUsed.IfNoOverrideGiven, false),
+     TestCase(UnderlyingNameUsed.Never, false)]
+    public void InMultiDefinedCases(UnderlyingNameUsed shouldUse, bool includeLiteral)
     {
-      TestEnum.MultiDefined.GetAllStringValues().Should().BeEquivalentTo("3", "Three");
+      EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = shouldUse;
+      var expectedCollection = new List<string> { "3", "Three" };
+      if (includeLiteral)
+      {
+        expectedCollection.Add(nameof(TestEnum.MultiDefined));
+      }
+
+      TestEnum.MultiDefined.GetAllStringValues().Should().BeEquivalentTo(expectedCollection);
     }
 
-    [Test]
-    public void InMultiDefinedCasesWithPreferences()
+    [Test,
+     TestCase(UnderlyingNameUsed.Always, true),
+     TestCase(UnderlyingNameUsed.IfNoOverrideGiven, false),
+     TestCase(UnderlyingNameUsed.Never, false)]
+    public void InMultiDefinedCasesWithPreferences(UnderlyingNameUsed shouldUse, bool includeLiteral)
     {
-      TestEnum.MultiDefinedWithPreferences.GetAllStringValues().Should().BeEquivalentTo("4", "Four");
+      EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = shouldUse;
+      var expectedCollection = new List<string> { "4", "Four" };
+      if (includeLiteral)
+      {
+        expectedCollection.Add(nameof(TestEnum.MultiDefinedWithPreferences));
+      }
+
+      TestEnum.MultiDefinedWithPreferences.GetAllStringValues().Should().BeEquivalentTo(expectedCollection);
+    }
+
+    [Test,
+     TestCase(UnderlyingNameUsed.Always, true),
+     TestCase(UnderlyingNameUsed.IfNoOverrideGiven, true),
+     TestCase(UnderlyingNameUsed.Never, false)]
+    public void InUnlabelledCases(UnderlyingNameUsed shouldUse, bool includeLiteral)
+    {
+      EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = shouldUse;
+      var expectedCollection = new List<string> { };
+      if (includeLiteral)
+      {
+        expectedCollection.Add(nameof(TestEnum.Unlabelled));
+      }
+
+      TestEnum.Unlabelled.GetAllStringValues().Should().BeEquivalentTo(expectedCollection);
     }
   }
 }

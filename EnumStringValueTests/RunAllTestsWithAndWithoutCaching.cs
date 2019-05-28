@@ -15,10 +15,11 @@ namespace EnumStringValueTests
     }
 
     [SetUp]
-    public void ResetCaching()
+    public void ResetSettings()
     {
       EnumExtensions.Behaviour.ResetCaches();
       EnumExtensions.Behaviour.UseCaching = cachingActiveByDefault;
+      EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = EnumExtensions.Behaviour.UnderlyingNameUsed.IfNoOverrideGiven;
     }
   }
 }
