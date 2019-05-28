@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using EnumStringValues;
 using FluentAssertions;
 
@@ -9,7 +6,7 @@ namespace EnumStringValueTests
 {
         public class ParseStringWorks :  EnumStringValueTestBase
     {
-            public ParseStringWorks(bool arg) : base(arg) { }
+    public ParseStringWorks(bool arg) : base(arg) {}
 
             [Test]
             public void InDefaultCase()

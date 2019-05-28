@@ -22,9 +22,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET20NugetPackageTest", "NET20NugetPackageTest\NET20NugetPackageTest.csproj", "{D9AC400B-3ADF-4D6D-9983-8A7B915F4F33}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D24DDF9-DC40-4B85-9384-9EA1DEE8C468}"
-	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,15 +65,8 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{6A69043A-3746-4397-9F30-F4FE811444F3} = {DEE2A652-FA9A-4197-BE34-DB262257C957}
-		{92878579-A0B5-4AC5-B411-5043FDA00E7F} = {DEE2A652-FA9A-4197-BE34-DB262257C957}
-		{3F35D8D3-EE42-49A0-B568-B8DE6BEB8C54} = {DEE2A652-FA9A-4197-BE34-DB262257C957}
-		{50252CB9-5300-4B4A-B6F1-48DC0B800AB5} = {DEE2A652-FA9A-4197-BE34-DB262257C957}
-		{C4048E67-8B7D-45CF-9693-AEDDA964A873} = {DEE2A652-FA9A-4197-BE34-DB262257C957}
-		{D9AC400B-3ADF-4D6D-9983-8A7B915F4F33} = {DEE2A652-FA9A-4197-BE34-DB262257C957}
-	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C368466A-B22A-4B19-A617-1D87126F09CB}
+		        SolutionGuid = {C368466A-B22A-4B19-A617-1D87126F09CB}
+		SolutionGuid = {333DB3E0-7CFA-497D-813C-D3C1A26A4A68}
 	EndGlobalSection
 EndGlobal

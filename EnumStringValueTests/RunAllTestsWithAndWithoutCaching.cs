@@ -8,6 +8,7 @@ namespace EnumStringValueTests
   public abstract class EnumStringValueTestBase
   {
     private readonly bool cachingActiveByDefault;
+
     protected EnumStringValueTestBase(bool cachingActiveByDefault)
     {
       this.cachingActiveByDefault = cachingActiveByDefault;

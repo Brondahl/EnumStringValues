@@ -16,7 +16,7 @@ namespace EnumStringValues
     ///   This attribute is used to represent a string value for a value in an enum.
     /// </summary>
     public StringValueAttribute(string value, bool preferred = false)
-      : this(value, preferred ? PreferenceLevel.High : PreferenceLevel.Default) 
+      : this(value, preferred ? PreferenceLevel.High : PreferenceLevel.Default)
     {
     }
 

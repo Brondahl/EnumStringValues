@@ -6,9 +6,10 @@ namespace EnumStringValueTests
 {
     public class EnumerateEnumValuesWorks :  EnumStringValueTestBase
     {
-            public EnumerateEnumValuesWorks(bool arg) : base(arg) { }
+    public EnumerateEnumValuesWorks(bool arg) : base(arg) {}
 
-            private readonly TestEnum[] expectedValuesInTestEnum = {
+    private readonly TestEnum[] expectedValuesInTestEnum =
+    {
                     TestEnum.Unlabelled,
                     TestEnum.SingleDefined,
                     TestEnum.SingleDefinedWithPreferences,
@@ -38,7 +39,8 @@ namespace EnumStringValueTests
                     TestEnum.EnumValueWithLotsOfEnumsBeforeIt
                 };
 
-            private readonly TestEnum_Secondary[] expectedValuesInSecondaryEnum = {
+    private readonly TestEnum_Secondary[] expectedValuesInSecondaryEnum =
+    {
                     TestEnum_Secondary.Unlabelled,
                     TestEnum_Secondary.SingleDefined,
                     TestEnum_Secondary.SingleDefinedWithPreferences,

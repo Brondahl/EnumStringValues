@@ -131,12 +131,12 @@ namespace EnumStringValues
       }
 
       stringValueAttributes = enumValue
-              .GetType()
-              .GetField(enumValue.ToString())
-              .GetCustomAttributes(typeof (StringValueAttribute), false)
-              .Cast<StringValueAttribute>()
-              .DefaultIfEmpty(new StringValueAttribute(enumValue.ToString(), PreferenceLevel.Low))
-              .ToList();
+        .GetType()
+        .GetField(enumValue.ToString())
+        .GetCustomAttributes(typeof(StringValueAttribute), false)
+        .Cast<StringValueAttribute>()
+        .DefaultIfEmpty(new StringValueAttribute(enumValue.ToString(), PreferenceLevel.Low))
+        .ToList();
 
       if (Behaviour.UseCaching)
       {
@@ -145,6 +145,7 @@ namespace EnumStringValues
 
       return stringValueAttributes;
     }
+
     /// <summary> Cache for <see cref="GetStringValuesWithPreferences"/> </summary>
     private static Dictionary<Enum, List<StringValueAttribute>> enumStringValuesDictionary;
 
@@ -165,12 +166,12 @@ namespace EnumStringValues
     ///==========================================================================
     public static TEnumType ParseToEnum<TEnumType>(this string stringValue) where TEnumType : System.Enum
     {
-        // ReSharper disable once RedundantTypeArgumentsOfMethod
-        if (TryParseStringValueToEnum<TEnumType>(stringValue, out TEnumType lRet))
-        {
-          return lRet;
-        }
-        throw new UnmatchedStringValueException(stringValue, typeof(TEnumType));
+      // ReSharper disable once RedundantTypeArgumentsOfMethod
+      if (TryParseStringValueToEnum<TEnumType>(stringValue, out TEnumType lRet))
+      {
+        return lRet;
+      }
+      throw new UnmatchedStringValueException(stringValue, typeof(TEnumType));
     }
 
     ///==========================================================================
@@ -188,7 +189,7 @@ namespace EnumStringValues
     ///==========================================================================
     public static List<TEnumType> ParseToEnumList<TEnumType>(this IEnumerable<string> stringValueCollection) where TEnumType : System.Enum
     {
-        return stringValueCollection.Select(ParseToEnum<TEnumType>).ToList();
+      return stringValueCollection.Select(ParseToEnum<TEnumType>).ToList();
     }
 
     ///==========================================================================
