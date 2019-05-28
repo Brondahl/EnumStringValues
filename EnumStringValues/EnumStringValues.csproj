@@ -4,8 +4,8 @@
     <TargetFrameworks>netstandard2.0;net35;net40;net451;net461</TargetFrameworks>
     <AssemblyName>EnumStringValues</AssemblyName>
     <PackageId>EnumStringValues</PackageId>
-    <PackageVersion>3.1.0</PackageVersion>
-    <Version>3.1.0</Version>
+    <PackageVersion>3.2.0</PackageVersion>
+    <Version>3.2.0</Version>
     <Title>Enum String Values</Title>
     <Authors>Brondahl</Authors>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -13,9 +13,15 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>
     Library to allow conversion between an Enum Value and a string, in both directions.
-    v3.1.0 adds opt-in Caching.
+    v3.2.0 adds opt-in ability for underlying Enum name to always be recognised as a StringValue.
     See nuget for full version history</Description>
     <PackageReleaseNotes>
+    Version 3.2.0
+       - Add direct control over how the enum's literal name is used.
+          - By default behaviour remains the same - literal name is used if and only if there are no StringValue attributes defined.
+          - Option is added to allow for literal name to always be included (as lowest priority) or never be included.
+          - Control is modified via: `EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = UnderlyingNameUsed.Always`
+          - Default will be changed to 'Always' in v4.0
     Version 3.1.0
        - Add option of caching all work done from all end points.
           - Caching is opt-in; accessed by setting EnumExtensions.Behaviour.UseCaching = true.

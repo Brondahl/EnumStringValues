@@ -65,7 +65,42 @@ EnumExtensions.Behaviour.UseCaching = true;
 EnumExtensions.Behaviour.UseCaching = false;
 ("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()
                // Returns to doing Work again
+
+
+/* Modify behavior with regard underlying enum name. */
+EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = UnderlyingNameUsed.Never;
+("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()               // Fails
+ exampleEnum.EnumWithoutAnyCustomStringValue.GetStringValue()                // returns null
+("EnumWithAStringValueDefined").ParseToEnum<exampleEnum>()                   // Fails
+ exampleEnum.EnumWithAStringValueDefined.GetAllStringValues()                // returns only "AValue"
+
+EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = UnderlyingNameUsed.IfNoOverrideGiven;
+("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()               // Suceeds
+ exampleEnum.EnumWithoutAnyCustomStringValue.GetStringValue()                // returns "EnumWithoutAnyCustomStringValue"
+("EnumWithAStringValueDefined").ParseToEnum<exampleEnum>()                   // Fails
+ exampleEnum.EnumWithAStringValueDefined.GetAllStringValues()                // returns only "AValue"
+
+EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = UnderlyingNameUsed.Always;
+("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()               // Suceeds
+ exampleEnum.EnumWithoutAnyCustomStringValue.GetStringValue()                // returns "EnumWithoutAnyCustomStringValue"
+("EnumWithAStringValueDefined").ParseToEnum<exampleEnum>()                   // Suceeds
+ exampleEnum.EnumWithAStringValueDefined.GetAllStringValues()                // returns only "AValue" and "EnumWithAStringValueDefined"
 ```
+
+
+public enum exampleEnum
+{
+  EnumWithoutAnyCustomStringValue,
+
+  [StringValue("AValue")]
+  EnumWithAStringValueDefined,
+
+  [StringValue("2", true),
+   StringValue("Two")]
+  EnumWithMultipleStringValuesDefinedAndOneMarkedAsPreferred
+}
+
+
 
 Classes, Methods, etc.
 ---------------------
@@ -163,9 +198,16 @@ I'll attempt to document any feature requests I receive here, along with any des
 Version History
 ----------------
 
+- 3.2.0
+       - Add direct control over how the enum's literal name is used.
+          - By default behaviour remains the same - literal name is used if and only if there are no StringValue attributes defined.
+          - Option is added to allow for literal name to always be included (as lowest priority) or never be included.
+          - Control is modified via: `EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = UnderlyingNameUsed.Always`.
+          - Default will be changed to 'Always' in v4.0
+
 - 3.1.0
        - Add option of caching all work done from all end points.
-          - Caching is opt-in; accessed by setting EnumExtensions.Behaviour.UseCaching = true.
+          - Caching is opt-in; accessed by setting `EnumExtensions.Behaviour.UseCaching = true`.
           - Caching is NOT thread-safe (to maintain .NET 3.5 support)
           - Thread-safety will be added in v4.0
 - 3.0.1

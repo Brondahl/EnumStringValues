@@ -67,4 +67,24 @@ EnumExtensions.Behaviour.UseCaching = true;
 EnumExtensions.Behaviour.UseCaching = false;
 ("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()
                // Returns to doing Work again
+
+
+/* Modify behavior with regard underlying enum name. */
+EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = UnderlyingNameUsed.Never;
+("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()               // Fails
+ exampleEnum.EnumWithoutAnyCustomStringValue.GetStringValue()                // returns null
+("EnumWithAStringValueDefined").ParseToEnum<exampleEnum>()                   // Fails
+ exampleEnum.EnumWithAStringValueDefined.GetAllStringValues()                // returns only "AValue"
+
+EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = UnderlyingNameUsed.IfNoOverrideGiven;
+("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()               // Suceeds
+ exampleEnum.EnumWithoutAnyCustomStringValue.GetStringValue()                // returns "EnumWithoutAnyCustomStringValue"
+("EnumWithAStringValueDefined").ParseToEnum<exampleEnum>()                   // Fails
+ exampleEnum.EnumWithAStringValueDefined.GetAllStringValues()                // returns only "AValue"
+
+EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = UnderlyingNameUsed.Always;
+("EnumWithoutAnyCustomStringValue").ParseToEnum<exampleEnum>()               // Suceeds
+ exampleEnum.EnumWithoutAnyCustomStringValue.GetStringValue()                // returns "EnumWithoutAnyCustomStringValue"
+("EnumWithAStringValueDefined").ParseToEnum<exampleEnum>()                   // Suceeds
+ exampleEnum.EnumWithAStringValueDefined.GetAllStringValues()                // returns only "AValue" and "EnumWithAStringValueDefined"
 ```
