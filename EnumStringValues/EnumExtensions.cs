@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 // ReSharper disable RedundantTypeArgumentsOfMethod
@@ -39,7 +40,7 @@ namespace EnumStringValues
         get => shouldIncludeUnderlyingName;
         set { shouldIncludeUnderlyingName = value; if(UseCaching) { ResetCaches(); } }
       }
-      private static UnderlyingNameUsed shouldIncludeUnderlyingName = UnderlyingNameUsed.IfNoOverrideGiven;
+      private static UnderlyingNameUsed shouldIncludeUnderlyingName = UnderlyingNameUsed.Always;
 
 
       /// <summary>
@@ -50,7 +51,7 @@ namespace EnumStringValues
         get => useCaching;
         set { useCaching = value; if (value) { ResetCaches(); } }
       }
-      private static bool useCaching = false;
+      private static bool useCaching = true;
 
 
       static Behaviour()
@@ -67,14 +68,14 @@ namespace EnumStringValues
       [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
       public static void ResetCaches()
       {
-        enumValuesDictionary = new Dictionary<Type, IEnumerable>();
-        enumStringValuesDictionary = new Dictionary<Enum, List<StringValueAttribute>>();
-        parsedEnumStringsDictionaryByType = new Dictionary<Type, Dictionary<string, Enum>>();
+        enumValuesDictionary = new ConcurrentDictionary<Type, IEnumerable>();
+        enumStringValuesDictionary = new ConcurrentDictionary<Enum, List<StringValueAttribute>>();
+        parsedEnumStringsDictionaryByType = new ConcurrentDictionary<Type, ConcurrentDictionary<string, Enum>>();
       }
     }
 
     /// <summary> Cache for <see cref="EnumerateValues{TEnumType}"/> </summary>
-    private static Dictionary<Type, IEnumerable> enumValuesDictionary;
+    private static ConcurrentDictionary<Type, IEnumerable> enumValuesDictionary;
 
     /// <summary> Returns an IEnumerable{T} of the possible values in the enum </summary>
     public static IEnumerable<TEnumType> EnumerateValues<TEnumType>() where TEnumType : System.Enum
@@ -84,11 +85,7 @@ namespace EnumStringValues
 
       if (Behaviour.UseCaching)
       {
-        if (!enumValuesDictionary.TryGetValue(enumTypeObject, out values))
-        {
-          values = Enum.GetValues(enumTypeObject);
-          enumValuesDictionary.Add(enumTypeObject, values);
-        }
+        values = enumValuesDictionary.GetOrAdd(enumTypeObject, Enum.GetValues);
       }
       else
       {
@@ -149,41 +146,39 @@ namespace EnumStringValues
     ///==========================================================================
     private static IEnumerable<StringValueAttribute> GetStringValuesWithPreferences(this Enum enumValue)
     {
-      List<StringValueAttribute> stringValueAttributes;
-
       if (Behaviour.UseCaching)
       {
-        if (enumStringValuesDictionary.TryGetValue(enumValue, out stringValueAttributes))
-        {
-          return stringValueAttributes;
-        }
+        return enumStringValuesDictionary.GetOrAdd(enumValue, GetStringValuesWithPreferences_Uncached);
       }
+      else
+      {
+        return GetStringValuesWithPreferences_Uncached(enumValue);
+      }
+    }
 
-      stringValueAttributes = enumValue
-        .GetType()
-        .GetField(enumValue.ToString())
-        .GetCustomAttributes(typeof(StringValueAttribute), false)
-        .Cast<StringValueAttribute>()
-        .ToList();
+    private static List<StringValueAttribute> GetStringValuesWithPreferences_Uncached(this Enum enumValue)
+    {
+      List<StringValueAttribute> stringValueAttributes =
+        enumValue
+          .GetType()
+          .GetField(enumValue.ToString())
+          .GetCustomAttributes(typeof(StringValueAttribute), false)
+          .Cast<StringValueAttribute>()
+          .ToList();
 
       if (
-          Behaviour.ShouldIncludeUnderlyingName == Behaviour.UnderlyingNameUsed.Always ||
-          (!stringValueAttributes.Any() && Behaviour.ShouldIncludeUnderlyingName != Behaviour.UnderlyingNameUsed.Never)
-         )
+        Behaviour.ShouldIncludeUnderlyingName == Behaviour.UnderlyingNameUsed.Always ||
+        (!stringValueAttributes.Any() && Behaviour.ShouldIncludeUnderlyingName != Behaviour.UnderlyingNameUsed.Never)
+      )
       {
         stringValueAttributes.Add(new StringValueAttribute(enumValue.ToString(), PreferenceLevel.Low));
-      }
-      
-      if (Behaviour.UseCaching)
-      {
-        enumStringValuesDictionary.Add(enumValue, stringValueAttributes);
       }
 
       return stringValueAttributes;
     }
 
     /// <summary> Cache for <see cref="GetStringValuesWithPreferences"/> </summary>
-    private static Dictionary<Enum, List<StringValueAttribute>> enumStringValuesDictionary;
+    private static ConcurrentDictionary<Enum, List<StringValueAttribute>> enumStringValuesDictionary;
 
     ///==========================================================================
     /// Public Extension Method on System.String: ParseToEnum
@@ -258,40 +253,36 @@ namespace EnumStringValues
       return TryParseStringValueToEnum_ViaCache(stringValue, out parsedValue);
     }
 
+    /// <remarks>
+    /// This is a little more complex than one might hope, because we also need to cache the knowledge of whether the parse succeeded or not.
+    /// We're doing that by storing `null`, if the answer is 'No'. And decoding that, specifically.
+    /// </remarks>
     private static bool TryParseStringValueToEnum_ViaCache<TEnumType>(string stringValue, out TEnumType parsedValue) where TEnumType : System.Enum
     {
       var enumTypeObject = typeof(TEnumType);
-      if (!parsedEnumStringsDictionaryByType.TryGetValue(enumTypeObject, out var typeAppropriateDictionary))
-      {
-        typeAppropriateDictionary = new Dictionary<string, Enum>();
-        parsedEnumStringsDictionaryByType.Add(enumTypeObject, typeAppropriateDictionary);
-      }
 
-      bool parseSucceeded;
-      if (typeAppropriateDictionary.TryGetValue(stringValue, out Enum cachedValue))
-      {
-        if (cachedValue != null)
-        {
-          parseSucceeded = true;
-          parsedValue = (TEnumType) cachedValue;
-        }
-        else
-        {
-          parseSucceeded = false;
-          parsedValue = default(TEnumType);
-        }
-      }
-      else //parse has never been attempted before. Try it now.
-      {
-        parseSucceeded = TryParseStringValueToEnum_Uncached<TEnumType>(stringValue, out parsedValue);
-        typeAppropriateDictionary.Add(stringValue, parseSucceeded ? (Enum) parsedValue : null);
-      }
+      var typeAppropriateDictionary = parsedEnumStringsDictionaryByType.GetOrAdd(enumTypeObject, (x) => new ConcurrentDictionary<string, Enum>());
 
-      return parseSucceeded;
+      var cachedValue = typeAppropriateDictionary.GetOrAdd(stringValue, (str) =>
+      {
+        var parseSucceededForDictionary = TryParseStringValueToEnum_Uncached<TEnumType>(stringValue, out var parsedValueForDictionary);
+        return parseSucceededForDictionary ? (Enum) parsedValueForDictionary : null;
+      });
+
+      if (cachedValue != null)
+      {
+        parsedValue = (TEnumType)cachedValue;
+        return true;
+      }
+      else
+      {
+        parsedValue = default(TEnumType);
+        return false;
+      }
     }
 
     /// <summary> Cache for <see cref="TryParseStringValueToEnum{TEnumType}"/> </summary>
-    private static Dictionary<Type, Dictionary<string, Enum>> parsedEnumStringsDictionaryByType;
+    private static ConcurrentDictionary<Type, ConcurrentDictionary<string, Enum>> parsedEnumStringsDictionaryByType;
 
     private static bool TryParseStringValueToEnum_Uncached<TEnumType>(this string stringValue, out TEnumType parsedValue) where TEnumType : System.Enum
     {

@@ -4,10 +4,20 @@ EnumStringValues
 Library to allow conversion between an Enum Value and a string, in both directions.
 Implemented as an Attribute to be applied to Enum fields to define a string, and methods to extract the defined string given the enum or provide the matching given a string.
 Enum name is registered as a default stringValue everywhere.
-All reflection operations can be cached, by actively enabling this feature, with EnumExtensions.Behaviour.UseCaching
+All reflection operations are cached. But this could be disabled, with `EnumExtensions.Behaviour.UseCaching`, if desired.
 
-Breaking Change in latest Release (2.0 -> 3.0)
+Breaking Change Log (3.0 -> 4.0)
 ----------------------------------------------
+- .NET 3.5 support is entirely dropped. Please use the last 3.2.* build.
+- There are 2 changes which change behaviour of the library, though do not cause compile-time errors. They are:
+   - Caching.
+      - This is now active by default, which will change the CPU vs RAM profile of EnumStringValues. See docs below for how to disable caching, if desired.
+   - Use of Enum Literal Name.
+      - The literal name is now always included by default, which might affect behaviour in some edge cases.
+      - Again, this behaviour is controllable, see docs below for how to adjust this behaviour, if desired.
+
+Breaking Change Log (2.0 -> 3.0)
+--------------------------------
 The Deprecated `ParseStringValueToEnum` method has been removed. Please use `ParseToEnum` instead.
 
 

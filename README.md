@@ -4,10 +4,20 @@ EnumStringValues
 Library to allow conversion between an Enum Value and a string, in both directions.
 Implemented as an Attribute to be applied to Enum fields to define a string, and methods to extract the defined string given the enum or provide the matching given a string.
 Enum name is registered as a default stringValue everywhere.
-All reflection operations can be cached, by actively enabling this feature, with EnumExtensions.Behaviour.UseCaching
+All reflection operations are cached. But this could be disabled, with `EnumExtensions.Behaviour.UseCaching`, if desired.
 
-Breaking Change in latest Release (2.0 -> 3.0)
+Breaking Change Log (3.0 -> 4.0)
 ----------------------------------------------
+- .NET 3.5 support is entirely dropped. Please use the last 3.2.* build.
+- There are 2 changes which change behaviour of the library, though do not cause compile-time errors. They are:
+   - Caching.
+      - This is now active by default, which will change the CPU vs RAM profile of EnumStringValues. See docs below for how to disable caching, if desired.
+   - Use of Enum Literal Name.
+      - The literal name is now always included by default, which might affect behaviour in some edge cases.
+      - Again, this behaviour is controllable, see docs below for how to adjust this behaviour, if desired.
+
+Breaking Change Log (2.0 -> 3.0)
+--------------------------------
 The Deprecated `ParseStringValueToEnum` method has been removed. Please use `ParseToEnum` instead.
 
 
@@ -198,6 +208,17 @@ I'll attempt to document any feature requests I receive here, along with any des
 Version History
 ----------------
 
+- 4.0.0
+       - Change default behaviours.
+          - Caching is enabled by default.
+          - Enum literal name is AlwaysIncluded by default.
+          - See docs and release notes for versions 3.1.0 and 3.2.0, to change these setting.
+       - Add thread-safety.
+          - Caching dictionaries were not thread-safe; now they are.
+       - Drop support for .NET 3.5
+          - Required, in order to implement thread-safety.
+          - Note that version 3.2.0 does support .NET 3.5 and has all the same functionality available, but without thread-safety and with different default Behaviour.
+
 - 3.2.0
        - Add direct control over how the enum's literal name is used.
           - By default behaviour remains the same - literal name is used if and only if there are no StringValue attributes defined.
@@ -210,10 +231,11 @@ Version History
           - Caching is opt-in; accessed by setting `EnumExtensions.Behaviour.UseCaching = true`.
           - Caching is NOT thread-safe (to maintain .NET 3.5 support)
           - Thread-safety will be added in v4.0
+
 - 3.0.1
        - Update codebase to C# 7.3 and thus add System.Enum constraints on all typed methods.
           - Only impact should be to convert run-time errors into compile-time errors
-          
+
 - 3.0 - Convert the project to .Net Standard 2.0
        - Remove the Obsolete `ParseStringValueToEnum` method.
 
