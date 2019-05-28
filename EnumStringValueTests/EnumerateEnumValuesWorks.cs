@@ -58,7 +58,7 @@ namespace EnumStringValueTests
             [Test]
             public void WithNoWeirdCachingBugs1()
             {
-              EnumExtensions.ResetCaches();
+              EnumExtensions.Behaviour.ResetCaches();
 
               var enumeration1Returned = EnumExtensions.EnumerateValues<TestEnum>();
               var enumeration2Returned = EnumExtensions.EnumerateValues<TestEnum_Secondary>();
@@ -72,7 +72,7 @@ namespace EnumStringValueTests
             [Test]
             public void WithNoWeirdCachingBugs2()
             {
-                EnumExtensions.ResetCaches();
+                EnumExtensions.Behaviour.ResetCaches();
 
                 var enumeration1Returned = EnumExtensions.EnumerateValues<TestEnum_Secondary>();
                 var enumeration2Returned = EnumExtensions.EnumerateValues<TestEnum>();
@@ -88,12 +88,12 @@ namespace EnumStringValueTests
             {
                 var reps = 10000;
 
-                EnumExtensions.ResetCaches();
-                EnumExtensions.UseCaching = false;
+                EnumExtensions.Behaviour.ResetCaches();
+                EnumExtensions.Behaviour.UseCaching = false;
                 double rawTime = TimeEnumeratingEnumValues<TestEnum>(reps);
 
-                EnumExtensions.ResetCaches();
-                EnumExtensions.UseCaching = true;
+                EnumExtensions.Behaviour.ResetCaches();
+                EnumExtensions.Behaviour.UseCaching = true;
                 double cachedTime = TimeEnumeratingEnumValues<TestEnum>(reps);
 
                 (cachedTime / rawTime).Should().BeLessThan(0.1f);
