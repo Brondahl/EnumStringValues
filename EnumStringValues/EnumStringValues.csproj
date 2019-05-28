@@ -4,8 +4,8 @@
     <TargetFrameworks>netstandard2.0;net40;net451;net461</TargetFrameworks>
     <AssemblyName>EnumStringValues</AssemblyName>
     <PackageId>EnumStringValues</PackageId>
-    <PackageVersion>3.2.0</PackageVersion>
-    <Version>3.2.0</Version>
+    <PackageVersion>4.0.0</PackageVersion>
+    <Version>4.0.0</Version>
     <Title>Enum String Values</Title>
     <Authors>Brondahl</Authors>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -13,9 +13,22 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>
     Library to allow conversion between an Enum Value and a string, in both directions.
-    v3.2.0 adds opt-in ability for underlying Enum name to always be recognised as a StringValue.
-    See nuget for full version history</Description>
+    v4.0.0 changes default behaviour to include caching and use enum literal names.
+    It also adds thread-safety, but drops support for .NET 3.5
+    See nuget for full version history
+    </Description>
     <PackageReleaseNotes>
+    Version 4.0.0
+       - Change default behaviours.
+          - Caching is enabled by default.
+          - Enum literal name is AlwaysIncluded by default.
+          - See docs and release notes for versions 3.1.0 and 3.2.0, to change these setting.
+       - Add thread-safety.
+          - Caching dictionaries were not thread-safe; now they are.
+       - Drop support for .NET frameworks prior to .NET 4
+          - Required, in order to implement thread-safety.
+          - Note that version 3.2.0 does support .NET 3.5 and has all the same functionality available, but without thread-safety and with different default Behaviour.
+          - Bug fixes will be applied to v 3.2.* but no new features will support .NET 3.5. Please contact me if you wish to argue otherwise.
     Version 3.2.0
        - Add direct control over how the enum's literal name is used.
           - By default behaviour remains the same - literal name is used if and only if there are no StringValue attributes defined.
