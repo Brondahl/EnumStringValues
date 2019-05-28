@@ -18,6 +18,13 @@ namespace EnumStringValues
   ///==========================================================================
   public static class EnumExtensions
   {
+    ///==========================================================================
+    /// Class : EnumExtensions.Behaviour
+    ///
+    /// <summary>
+    ///   Static class containing Behaviour configuration for EnumExtensions.
+    /// </summary>
+    ///==========================================================================
     public static class Behaviour
     {
       /// <summary>
