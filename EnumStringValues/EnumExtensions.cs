@@ -39,7 +39,7 @@ namespace EnumStringValues
         get => shouldIncludeUnderlyingName;
         set { shouldIncludeUnderlyingName = value; if(UseCaching) { ResetCaches(); } }
       }
-      private static UnderlyingNameUsed shouldIncludeUnderlyingName = UnderlyingNameUsed.IfNoOverrideGiven;
+      private static UnderlyingNameUsed shouldIncludeUnderlyingName = UnderlyingNameUsed.Always;
 
 
       /// <summary>
@@ -50,7 +50,7 @@ namespace EnumStringValues
         get => useCaching;
         set { useCaching = value; if (value) { ResetCaches(); } }
       }
-      private static bool useCaching = false;
+      private static bool useCaching = true;
 
 
       static Behaviour()
