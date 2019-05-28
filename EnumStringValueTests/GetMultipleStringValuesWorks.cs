@@ -4,11 +4,10 @@ using FluentAssertions;
 
 namespace EnumStringValueTests
 {
-    public partial class EnumStringValueTest
-    {
-        [TestFixture]
-        public class GetMultipleStringValuesWorks
+        public class GetMultipleStringValuesWorks :  EnumStringValueTestBase
         {
+            public GetMultipleStringValuesWorks(bool arg) : base(arg) { }
+
             [Test]
             public void InSingleDefinedCases()
             {
@@ -27,5 +26,4 @@ namespace EnumStringValueTests
                 TestEnum.MultiDefinedWithPreferences.GetAllStringValues().Should().BeEquivalentTo("4", "Four");
             }
         }
-    }
 }

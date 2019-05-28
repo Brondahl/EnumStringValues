@@ -5,9 +5,10 @@ using FluentAssertions;
 
 namespace EnumStringValueTests
 {
-    [TestFixture]
-    public class ParseStringThrows
+    public class ParseStringThrows :  EnumStringValueTestBase
     {
+        public ParseStringThrows(bool arg) : base(arg) { }
+
         [Test]
         public void WhenStringIsNull()
         {

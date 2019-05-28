@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 
 namespace EnumStringValues
 {
@@ -13,9 +15,55 @@ namespace EnumStringValues
   ///==========================================================================
   public static class EnumExtensions
   {
+    public static class Behaviour
+    {
+      /// <summary>
+      /// Controls whether Caching should be used. Defaults to false.
+      /// </summary>
+      public static bool UseCaching = false;
+
+      static Behaviour()
+      {
+        ResetCaches();
+      }
+
+      /// <summary>
+      /// Method for use in testing.
+      /// Needs to be public to be used in the test project.
+      /// Not a problem to expose to the user, but never valuable (as long as the tests pass :) )
+      /// So won't be documented and will be hidden from Intellisense.
+      /// </summary>
+      [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+      public static void ResetCaches()
+      {
+        enumValuesDictionary = new Dictionary<Type, IEnumerable>();
+        enumStringValuesDictionary = new Dictionary<Enum, List<StringValueAttribute>>();
+        parsedEnumStringsDictionaryByType = new Dictionary<Type, Dictionary<string, Enum>>();
+      }
+    }
+
+    /// <summary> Cache for <see cref="EnumerateValues{TEnumType}"/> </summary>
+    private static Dictionary<Type, IEnumerable> enumValuesDictionary;
+
     public static IEnumerable<TEnumType> EnumerateValues<TEnumType>() where TEnumType : System.Enum
     {
-      return Enum.GetValues(typeof(TEnumType)).Cast<TEnumType>();
+      var enumTypeObject = typeof(TEnumType);
+      IEnumerable values;
+
+      if (Behaviour.UseCaching)
+      {
+        if (!enumValuesDictionary.TryGetValue(enumTypeObject, out values))
+        {
+          values = Enum.GetValues(enumTypeObject);
+          enumValuesDictionary.Add(enumTypeObject, values);
+        }
+      }
+      else
+      {
+        values = Enum.GetValues(enumTypeObject);
+      }
+
+      return values.Cast<TEnumType>();
     }
 
     ///==========================================================================
@@ -67,15 +115,35 @@ namespace EnumStringValues
     ///   the implicit StringValue.
     /// </summary>
     ///==========================================================================
-    private static IEnumerable<StringValueAttribute> GetStringValuesWithPreferences(this Enum value)
+    private static IEnumerable<StringValueAttribute> GetStringValuesWithPreferences(this Enum enumValue)
     {
-      return value
+      List<StringValueAttribute> stringValueAttributes = null;
+
+      if (Behaviour.UseCaching)
+      {
+        if (enumStringValuesDictionary.TryGetValue(enumValue, out stringValueAttributes))
+        {
+          return stringValueAttributes;
+        }
+      }
+
+      stringValueAttributes = enumValue
               .GetType()
-              .GetField(value.ToString())
+              .GetField(enumValue.ToString())
               .GetCustomAttributes(typeof (StringValueAttribute), false)
               .Cast<StringValueAttribute>()
-              .DefaultIfEmpty(new StringValueAttribute(value.ToString(), PreferenceLevel.Low));
+              .DefaultIfEmpty(new StringValueAttribute(enumValue.ToString(), PreferenceLevel.Low))
+              .ToList();
+
+      if (Behaviour.UseCaching)
+      {
+        enumStringValuesDictionary.Add(enumValue, stringValueAttributes);
+      }
+
+      return stringValueAttributes;
     }
+    /// <summary> Cache for <see cref="GetStringValuesWithPreferences"/> </summary>
+    private static Dictionary<Enum, List<StringValueAttribute>> enumStringValuesDictionary;
 
     ///==========================================================================
     /// Public Extension Method on System.String: ParseToEnum
@@ -140,9 +208,54 @@ namespace EnumStringValues
     {
       if (stringValue == null)
       {
-        throw new ArgumentNullException("stringValue", "Input string may not be null.");
+        throw new ArgumentNullException(nameof(stringValue), "Input string may not be null.");
       }
 
+      if (!Behaviour.UseCaching)
+      {
+        return TryParseStringValueToEnum_Uncached(stringValue, out parsedValue);
+      }
+
+      return TryParseStringValueToEnum_ViaCache(stringValue, out parsedValue);
+    }
+
+    private static bool TryParseStringValueToEnum_ViaCache<TEnumType>(string stringValue, out TEnumType parsedValue) where TEnumType : System.Enum
+    {
+      var enumTypeObject = typeof(TEnumType);
+      if (!parsedEnumStringsDictionaryByType.TryGetValue(enumTypeObject, out var typeAppropriateDictionary))
+      {
+        typeAppropriateDictionary = new Dictionary<string, Enum>();
+        parsedEnumStringsDictionaryByType.Add(enumTypeObject, typeAppropriateDictionary);
+      }
+
+      bool parseSucceeded;
+      if (typeAppropriateDictionary.TryGetValue(stringValue, out Enum cachedValue))
+      {
+        if (cachedValue != null)
+        {
+          parseSucceeded = true;
+          parsedValue = (TEnumType) cachedValue;
+        }
+        else
+        {
+          parseSucceeded = false;
+          parsedValue = default(TEnumType);
+        }
+      }
+      else //parse has never been attempted before. Try it now.
+      {
+        parseSucceeded = TryParseStringValueToEnum_Uncached<TEnumType>(stringValue, out parsedValue);
+        typeAppropriateDictionary.Add(stringValue, parseSucceeded ? (Enum) parsedValue : null);
+      }
+
+      return parseSucceeded;
+    }
+
+    /// <summary> Cache for <see cref="TryParseStringValueToEnum{TEnumType}"/> </summary>
+    private static Dictionary<Type, Dictionary<string, Enum>> parsedEnumStringsDictionaryByType;
+
+    private static bool TryParseStringValueToEnum_Uncached<TEnumType>(this string stringValue, out TEnumType parsedValue) where TEnumType : System.Enum
+    {
       foreach (var enumValue in EnumerateValues<TEnumType>())
       {
        // ReSharper disable once RedundantTypeArgumentsOfMethod

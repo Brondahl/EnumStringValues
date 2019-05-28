@@ -4,11 +4,10 @@ using FluentAssertions;
 
 namespace EnumStringValueTests
 {
-    public partial class EnumStringValueTest
-    {
-        [TestFixture]
-        public class ParseStringWorksAsAnExtensionMethodOnStringEnumerations
+        public class ParseStringWorksAsAnExtensionMethodOnStringEnumerations :  EnumStringValueTestBase
         {
+            public ParseStringWorksAsAnExtensionMethodOnStringEnumerations(bool arg) : base(arg) { }
+
             [Test]
             public void ForSingleElementEnumerations()
             {
@@ -33,5 +32,4 @@ namespace EnumStringValueTests
                 new[] { "1", "1" }.ParseToEnumList<TestEnum>().Should().BeEquivalentTo(TestEnum.SingleDefined, TestEnum.SingleDefined);
             }
         }
-    }
 }
