@@ -20,9 +20,38 @@ namespace EnumStringValues
     public static class Behaviour
     {
       /// <summary>
+      /// Enum to list possible behaviours
+      /// </summary>
+      public enum UnderlyingNameUsed
+      {
+  #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        Never,
+        IfNoOverrideGiven,
+        Always,
+  #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+      }
+
+      /// <summary>
       /// Controls whether Caching should be used. Defaults to false.
       /// </summary>
-      public static bool UseCaching = false;
+      public static UnderlyingNameUsed ShouldIncludeUnderlyingName
+      {
+        get => shouldIncludeUnderlyingName;
+        set { shouldIncludeUnderlyingName = value; if(UseCaching) { ResetCaches(); } }
+      }
+      private static UnderlyingNameUsed shouldIncludeUnderlyingName = UnderlyingNameUsed.IfNoOverrideGiven;
+
+
+      /// <summary>
+      /// Controls whether Caching should be used. Defaults to false.
+      /// </summary>
+      public static bool UseCaching
+      {
+        get => useCaching;
+        set { useCaching = value; if (value) { ResetCaches(); } }
+      }
+      private static bool useCaching = false;
+
 
       static Behaviour()
       {
@@ -135,9 +164,16 @@ namespace EnumStringValues
         .GetField(enumValue.ToString())
         .GetCustomAttributes(typeof(StringValueAttribute), false)
         .Cast<StringValueAttribute>()
-        .DefaultIfEmpty(new StringValueAttribute(enumValue.ToString(), PreferenceLevel.Low))
         .ToList();
 
+      if (
+          Behaviour.ShouldIncludeUnderlyingName == Behaviour.UnderlyingNameUsed.Always ||
+          (!stringValueAttributes.Any() && Behaviour.ShouldIncludeUnderlyingName != Behaviour.UnderlyingNameUsed.Never)
+         )
+      {
+        stringValueAttributes.Add(new StringValueAttribute(enumValue.ToString(), PreferenceLevel.Low));
+      }
+      
       if (Behaviour.UseCaching)
       {
         enumStringValuesDictionary.Add(enumValue, stringValueAttributes);
