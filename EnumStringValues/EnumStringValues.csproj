@@ -8,6 +8,7 @@
     <Version>4.0.0</Version>
     <Title>Enum String Values</Title>
     <Authors>Brondahl</Authors>
+    <PackageOutputPath>../nuget</PackageOutputPath>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/Brondahl/EnumStringValues</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
