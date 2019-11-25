@@ -34,7 +34,7 @@ The Deprecated `ParseStringValueToEnum` method has been removed. Please use `Par
 Example Usage
 -------------
 
-```
+```csharp
 /* Define Mappings. */
 public enum exampleEnum
 {
@@ -106,21 +106,6 @@ EnumExtensions.Behaviour.ShouldIncludeUnderlyingName = UnderlyingNameUsed.Always
 ("EnumWithAStringValueDefined").ParseToEnum<exampleEnum>()                   // Suceeds
  exampleEnum.EnumWithAStringValueDefined.GetAllStringValues()                // returns only "AValue" and "EnumWithAStringValueDefined"
 ```
-
-
-public enum exampleEnum
-{
-  EnumWithoutAnyCustomStringValue,
-
-  [StringValue("AValue")]
-  EnumWithAStringValueDefined,
-
-  [StringValue("2", true),
-   StringValue("Two")]
-  EnumWithMultipleStringValuesDefinedAndOneMarkedAsPreferred
-}
-
-
 
 Classes, Methods, etc.
 ---------------------
