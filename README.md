@@ -1,3 +1,6 @@
+![Travis (.com)](https://img.shields.io/travis/Brondahl/EnumStringValues)
+![Nuget](https://img.shields.io/nuget/v/EnumStringValues)
+
 EnumStringValues
 ================
 
