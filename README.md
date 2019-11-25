@@ -1,5 +1,12 @@
-![Travis (.com)](https://img.shields.io/travis/Brondahl/EnumStringValues)
-![Nuget](https://img.shields.io/nuget/v/EnumStringValues)
+<a href="https://travis-ci.org/Brondahl/EnumStringValues">
+  <img src="https://img.shields.io/travis/Brondahl/EnumStringValues" alt="Current TravisCI build status." />
+</a>
+<a href="https://www.nuget.org/packages/EnumStringValues/">
+  <img src="https://img.shields.io/nuget/v/EnumStringValues" alt="Latest Nuget Release." />
+</a>
+<a href="https://github.com/Brondahl/EnumStringValues/blob/master/MIT-LICENSE.txt">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="EnumStringValues is released under the MIT license." />
+</a>
 
 EnumStringValues
 ================
