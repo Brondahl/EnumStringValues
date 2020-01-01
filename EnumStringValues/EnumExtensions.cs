@@ -269,15 +269,12 @@ namespace EnumStringValues
     {
       var enumTypeObject = typeof(TEnumType);
 
-      var typeAppropriateDictionary = parsedEnumStringsDictionaryByType.GetOrAdd(enumTypeObject, (x) => new ConcurrentDictionary<string, Enum>());
+      var typeAppropriateDictionary = parsedEnumStringsDictionaryByType.GetOrAdd(
+        enumTypeObject, 
+        (x) => BuildCacheDictionaryForParseStringValue<TEnumType>()
+      );
 
-      var cachedValue = typeAppropriateDictionary.GetOrAdd(lowerStringValue, (str) =>
-      {
-        var parseSucceededForDictionary = TryParseStringValueToEnum_Uncached<TEnumType>(lowerStringValue, out var parsedValueForDictionary);
-        return parseSucceededForDictionary ? (Enum) parsedValueForDictionary : null;
-      });
-
-      if (cachedValue != null)
+      if (typeAppropriateDictionary.TryGetValue(lowerStringValue, out var cachedValue))
       {
         parsedValue = (TEnumType)cachedValue;
         return true;
@@ -291,6 +288,25 @@ namespace EnumStringValues
 
     /// <summary> Cache for <see cref="TryParseStringValueToEnum{TEnumType}"/> </summary>
     private static ConcurrentDictionary<Type, ConcurrentDictionary<string, Enum>> parsedEnumStringsDictionaryByType;
+
+
+    private static ConcurrentDictionary<string, Enum> BuildCacheDictionaryForParseStringValue<TEnumType>() where TEnumType : System.Enum
+    {
+      var dict = new ConcurrentDictionary<string, Enum>();
+
+      foreach (var enumValue in EnumerateValues<TEnumType>())
+      {
+        foreach (var enumString in GetStringValues<TEnumType>(enumValue))
+        {
+            // Add to the dictionary, just overwriting if the string is already present.
+            // This overwrite is legitimate, because we've declared parsing a duplicate string definition to be `undefined behaviour`.
+            dict.AddOrUpdate(enumString.ToLower(), enumValue, ((repeatedString, previousEnumValue) => enumValue));
+        }
+      }
+
+      return dict;
+    }
+
 
     private static bool TryParseStringValueToEnum_Uncached<TEnumType>(this string lowerStringValue, out TEnumType parsedValue) where TEnumType : System.Enum
     {
