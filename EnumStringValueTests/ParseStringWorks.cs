@@ -92,7 +92,7 @@ namespace EnumStringValueTests
               EnumExtensions.Behaviour.UseCaching = true;
               double cachedTime = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
 
-              (cachedTime / rawTime).Should().BeLessThan(0.1f);
+              (cachedTime / rawTime).Should().BeLessThan(0.15f);
             }
 
             [Test, Repeat(10)]
