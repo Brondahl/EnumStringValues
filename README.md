@@ -14,7 +14,7 @@ EnumStringValues
 Library to allow conversion between an Enum Value and a string, in both directions.
 Implemented as an Attribute to be applied to Enum fields to define a string, and methods to extract the defined string given the enum or provide the matching given a string.
 Enum name is registered as a default stringValue everywhere.
-All reflection operations are cached. But this could be disabled, with `EnumExtensions.Behaviour.UseCaching`, if desired.
+All operations are cached, to save on reflection overheads. But this can be disabled, with `EnumExtensions.Behaviour.UseCaching`, if desired.
 
 Breaking Change Log (3.0 -> 4.0)
 ----------------------------------------------
@@ -156,8 +156,6 @@ Removed
 
 Exceptions and Edge Cases
 -------------------------
-
-All the Generic methods are constrained as T: struct, IConvertible, which I believe to be as close to "is an Enum" as one can get in generic Type constraints. There is a further reflection-based check in the code, so calling any of them with T as a non-Enum will throw an InvalidOperationException.
 
 * Calling GetStringValue when no string value is defined
  * ...... will return enum Name
