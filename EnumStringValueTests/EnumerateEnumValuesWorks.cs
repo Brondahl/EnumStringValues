@@ -58,13 +58,13 @@ namespace EnumStringValueTests
             }
 
             [Test]
-            public void WithNoWeirdCachingBugs1()
+            public void ConsistentlyWhenInterleavedWithEnumerationsOfOtherEnums_DespiteCaching1()
             {
               EnumExtensions.Behaviour.ResetCaches();
 
               var enumeration1Returned = EnumExtensions.EnumerateValues<TestEnum>();
               var enumeration2Returned = EnumExtensions.EnumerateValues<TestEnum_Secondary>();
-                var enumeration1ReturnedAgain = EnumExtensions.EnumerateValues<TestEnum>();
+              var enumeration1ReturnedAgain = EnumExtensions.EnumerateValues<TestEnum>();
 
               CollectionAssert.AreEquivalent(expectedValuesInTestEnum, enumeration1Returned);
               CollectionAssert.AreEquivalent(expectedValuesInSecondaryEnum, enumeration2Returned);
@@ -72,7 +72,7 @@ namespace EnumStringValueTests
             }
 
             [Test]
-            public void WithNoWeirdCachingBugs2()
+            public void ConsistentlyWhenInterleavedWithEnumerationsOfOtherEnums_DespiteCaching2()
             {
                 EnumExtensions.Behaviour.ResetCaches();
 

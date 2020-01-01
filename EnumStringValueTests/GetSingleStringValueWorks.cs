@@ -33,7 +33,7 @@ namespace EnumStringValueTests
             }
 
             [Test]
-            public void WithNoWeirdCachingBugs()
+            public void ConsistentlyWhenInterleavedWithOtherCalls_DespiteCaching1()
             {
               EnumExtensions.Behaviour.ResetCaches();
 
@@ -47,7 +47,7 @@ namespace EnumStringValueTests
             }
 
             [Test]
-            public void WithNoWeirdCachingBugs2()
+            public void ConsistentlyWhenInterleavedWithOtherCalls_DespiteCaching2()
             {
               EnumExtensions.Behaviour.ResetCaches();
 
@@ -61,7 +61,7 @@ namespace EnumStringValueTests
             }
 
             [Test]
-            public void WithNoWeirdCachingBugs3()
+            public void ConsistentlyWhenInterleavedWithOtherCalls_DespiteCaching3()
             {
               EnumExtensions.Behaviour.ResetCaches();
 
