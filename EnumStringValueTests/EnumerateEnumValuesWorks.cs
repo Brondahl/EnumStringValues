@@ -10,7 +10,7 @@ namespace EnumStringValueTests
 
     private readonly TestEnum[] expectedValuesInTestEnum =
     {
-                    TestEnum.Unlabelled,
+                    TestEnum.Unlabeled,
                     TestEnum.SingleDefined,
                     TestEnum.SingleDefinedWithPreferences,
                     TestEnum.MultiDefined,
@@ -41,7 +41,7 @@ namespace EnumStringValueTests
 
     private readonly TestEnum_Secondary[] expectedValuesInSecondaryEnum =
     {
-                    TestEnum_Secondary.Unlabelled,
+                    TestEnum_Secondary.Unlabeled,
                     TestEnum_Secondary.SingleDefined,
                     TestEnum_Secondary.SingleDefinedWithPreferences,
                     TestEnum_Secondary.MultiDefined,

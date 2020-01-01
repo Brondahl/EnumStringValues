@@ -11,7 +11,7 @@ namespace EnumStringValueTests
     [Test]
     public void InDefaultCase()
     {
-      "Unlabelled".ParseToEnum<TestEnum>().Should().Be(TestEnum.Unlabelled);
+      "Unlabeled".ParseToEnum<TestEnum>().Should().Be(TestEnum.Unlabeled);
     }
 
     [Test]

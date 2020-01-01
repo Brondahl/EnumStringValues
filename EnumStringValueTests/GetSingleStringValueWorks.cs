@@ -11,7 +11,7 @@ namespace EnumStringValueTests
             [Test]
             public void InUndefinedCases()
             {
-                TestEnum.Unlabelled.GetStringValue().Should().Be("Unlabelled");
+                TestEnum.Unlabeled.GetStringValue().Should().Be("Unlabeled");
             }
 
             [Test]
