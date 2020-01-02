@@ -1,17 +1,18 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using EnumStringValues;
 using FluentAssertions;
 
 namespace EnumStringValueTests
 {
-        public class ParseStringWorks :  EnumStringValueTestBase
+    public class ParseStringWorks : EnumStringValueTestBase
     {
-    public ParseStringWorks(bool arg) : base(arg) {}
+            public ParseStringWorks(bool arg) : base(arg) {}
 
             [Test]
             public void InDefaultCase()
             {
-                EnumExtensions.ParseToEnum<TestEnum>("Unlabelled").Should().Be(TestEnum.Unlabelled);
+                EnumExtensions.ParseToEnum<TestEnum>("Unlabeled").Should().Be(TestEnum.Unlabeled);
             }
 
             [Test]
@@ -48,7 +49,7 @@ namespace EnumStringValueTests
             }
 
             [Test]
-            public void WithNoWeirdCachingBugs1()
+            public void ConsistentlyWhenInterleavedWithOtherParseCalls_DespiteCaching1()
             {
                 EnumExtensions.Behaviour.ResetCaches();
 
@@ -64,7 +65,7 @@ namespace EnumStringValueTests
             }
 
             [Test]
-            public void WithNoWeirdCachingBugs2()
+            public void ConsistentlyWhenInterleavedWithOtherParseCalls_DespiteCaching2()
             {
                 EnumExtensions.Behaviour.ResetCaches();
 
@@ -92,7 +93,32 @@ namespace EnumStringValueTests
               EnumExtensions.Behaviour.UseCaching = true;
               double cachedTime = TimeParsingStringForEnum(TestEnum.SingleDefined, reps);
 
-              (cachedTime / rawTime).Should().BeLessThan(0.1f);
+              (cachedTime / rawTime).Should().BeLessThan(0.15f);
+            }
+
+            [Test]
+            public void WithoutAMemoryLeakInTheEventOfAMaliciousUser()
+            {
+              EnumExtensions.Behaviour.ResetCaches();
+              EnumExtensions.Behaviour.UseCaching = true;
+
+              "Parse one string to prime the cache".TryParseStringValueToEnum<TestEnum>(out var _);
+
+              GC.WaitForPendingFinalizers();
+              GC.Collect();
+              var memBefore = GC.GetTotalMemory(true);
+
+              for (int i = 0; i < 1_000_000; i++)
+              {
+                ("InvalidInputFromMaliciousUser" + i).TryParseStringValueToEnum<TestEnum>(out var _);
+              }
+
+              GC.WaitForPendingFinalizers();
+              GC.Collect();
+              var memAfter = GC.GetTotalMemory(true);
+
+              var allowableMemoryGain = 1_000;// allow for about 1KB of variation.
+              memAfter.Should().BeLessOrEqualTo(memBefore + allowableMemoryGain);
             }
 
             [Test, Repeat(10)]

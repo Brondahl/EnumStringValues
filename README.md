@@ -14,7 +14,7 @@ EnumStringValues
 Library to allow conversion between an Enum Value and a string, in both directions.
 Implemented as an Attribute to be applied to Enum fields to define a string, and methods to extract the defined string given the enum or provide the matching given a string.
 Enum name is registered as a default stringValue everywhere.
-All reflection operations are cached. But this could be disabled, with `EnumExtensions.Behaviour.UseCaching`, if desired.
+All operations are cached, to save on reflection overheads. But this can be disabled, with `EnumExtensions.Behaviour.UseCaching`, if desired.
 
 Breaking Change Log (3.0 -> 4.0)
 ----------------------------------------------
@@ -157,8 +157,6 @@ Removed
 Exceptions and Edge Cases
 -------------------------
 
-All the Generic methods are constrained as T: struct, IConvertible, which I believe to be as close to "is an Enum" as one can get in generic Type constraints. There is a further reflection-based check in the code, so calling any of them with T as a non-Enum will throw an InvalidOperationException.
-
 * Calling GetStringValue when no string value is defined
  * ...... will return enum Name
 * Calling ParseToEnum<T>() when the string is null
@@ -203,6 +201,9 @@ I'll attempt to document any feature requests I receive here, along with any des
 Version History
 ----------------
 
+- 4.0.1
+       - Fix MemoryLeak bug, in a MaliciousUser edge-case.
+
 - 4.0.0
        - Change default behaviours.
           - Caching is enabled by default.
@@ -231,10 +232,12 @@ Version History
        - Update codebase to C# 7.3 and thus add System.Enum constraints on all typed methods.
           - Only impact should be to convert run-time errors into compile-time errors
 
-- 3.0 - Convert the project to .Net Standard 2.0
+- 3.0
+       - Convert the project to .Net Standard 2.0
        - Remove the Obsolete `ParseStringValueToEnum` method.
 
-- 2.0  - Make the library use the existing Enum name as its default string value
+- 2.0
+       - Make the library use the existing Enum name as its default string value
        - Exposed the Parse methods as extensions on `String` and `List<string>`
        - Added a clone of the basic Parse method renamed as `ParseToEnum<T>`
        - NOTE: The old parse method (`ParseStringValueToEnum`) is now deprecated and will be removed in vNext. `ParseToEnum` is identical and should be used instead.

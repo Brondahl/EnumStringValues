@@ -252,31 +252,29 @@ namespace EnumStringValues
         throw new ArgumentNullException(nameof(stringValue), "Input string may not be null.");
       }
 
+      var lowerStringValue = stringValue.ToLower();
       if (!Behaviour.UseCaching)
       {
-        return TryParseStringValueToEnum_Uncached(stringValue, out parsedValue);
+        return TryParseStringValueToEnum_Uncached(lowerStringValue, out parsedValue);
       }
 
-      return TryParseStringValueToEnum_ViaCache(stringValue, out parsedValue);
+      return TryParseStringValueToEnum_ViaCache(lowerStringValue, out parsedValue);
     }
 
     /// <remarks>
     /// This is a little more complex than one might hope, because we also need to cache the knowledge of whether the parse succeeded or not.
     /// We're doing that by storing `null`, if the answer is 'No'. And decoding that, specifically.
     /// </remarks>
-    private static bool TryParseStringValueToEnum_ViaCache<TEnumType>(string stringValue, out TEnumType parsedValue) where TEnumType : System.Enum
+    private static bool TryParseStringValueToEnum_ViaCache<TEnumType>(string lowerStringValue, out TEnumType parsedValue) where TEnumType : System.Enum
     {
       var enumTypeObject = typeof(TEnumType);
 
-      var typeAppropriateDictionary = parsedEnumStringsDictionaryByType.GetOrAdd(enumTypeObject, (x) => new ConcurrentDictionary<string, Enum>());
+      var typeAppropriateDictionary = parsedEnumStringsDictionaryByType.GetOrAdd(
+        enumTypeObject, 
+        (x) => BuildCacheDictionaryForParseStringValue<TEnumType>()
+      );
 
-      var cachedValue = typeAppropriateDictionary.GetOrAdd(stringValue, (str) =>
-      {
-        var parseSucceededForDictionary = TryParseStringValueToEnum_Uncached<TEnumType>(stringValue, out var parsedValueForDictionary);
-        return parseSucceededForDictionary ? (Enum) parsedValueForDictionary : null;
-      });
-
-      if (cachedValue != null)
+      if (typeAppropriateDictionary.TryGetValue(lowerStringValue, out var cachedValue))
       {
         parsedValue = (TEnumType)cachedValue;
         return true;
@@ -291,14 +289,32 @@ namespace EnumStringValues
     /// <summary> Cache for <see cref="TryParseStringValueToEnum{TEnumType}"/> </summary>
     private static ConcurrentDictionary<Type, ConcurrentDictionary<string, Enum>> parsedEnumStringsDictionaryByType;
 
-    private static bool TryParseStringValueToEnum_Uncached<TEnumType>(this string stringValue, out TEnumType parsedValue) where TEnumType : System.Enum
+
+    private static ConcurrentDictionary<string, Enum> BuildCacheDictionaryForParseStringValue<TEnumType>() where TEnumType : System.Enum
+    {
+      var dict = new ConcurrentDictionary<string, Enum>();
+
+      foreach (var enumValue in EnumerateValues<TEnumType>())
+      {
+        foreach (var enumString in GetStringValues<TEnumType>(enumValue))
+        {
+            // Add to the dictionary, just overwriting if the string is already present.
+            // This overwrite is legitimate, because we've declared parsing a duplicate string definition to be `undefined behaviour`.
+            dict.AddOrUpdate(enumString.ToLower(), enumValue, ((repeatedString, previousEnumValue) => enumValue));
+        }
+      }
+
+      return dict;
+    }
+
+
+    private static bool TryParseStringValueToEnum_Uncached<TEnumType>(this string lowerStringValue, out TEnumType parsedValue) where TEnumType : System.Enum
     {
       foreach (var enumValue in EnumerateValues<TEnumType>())
       {
         var enumStrings = GetStringValues<TEnumType>(enumValue).Select(text => text.ToLower());
-        var inputString = stringValue.ToLower();
 
-        if (enumStrings.Contains(inputString))
+        if (enumStrings.Contains(lowerStringValue))
         {
           parsedValue = enumValue;
           return true;

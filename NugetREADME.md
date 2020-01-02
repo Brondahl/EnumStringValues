@@ -4,7 +4,7 @@ EnumStringValues
 Library to allow conversion between an Enum Value and a string, in both directions.
 Implemented as an Attribute to be applied to Enum fields to define a string, and methods to extract the defined string given the enum or provide the matching given a string.
 Enum name is registered as a default stringValue everywhere.
-All reflection operations are cached. But this could be disabled, with `EnumExtensions.Behaviour.UseCaching`, if desired.
+All operations are cached, to save on reflection overheads. But this can be disabled, with `EnumExtensions.Behaviour.UseCaching`, if desired.
 
 Breaking Change Log (3.0 -> 4.0)
 ----------------------------------------------

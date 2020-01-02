@@ -4,7 +4,7 @@ namespace EnumStringValueTests
 {
   public enum TestEnum
   {
-    Unlabelled,
+    Unlabeled,
 
     [StringValue("1")] SingleDefined,
 
@@ -42,7 +42,7 @@ namespace EnumStringValueTests
 
   public enum TestEnum_Secondary
   {
-    Unlabelled,
+    Unlabeled,
 
     [StringValue("3")] SingleDefined,
 

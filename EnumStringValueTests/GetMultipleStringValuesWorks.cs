@@ -68,10 +68,10 @@ namespace EnumStringValueTests
       var expectedCollection = new List<string> { };
       if (includeLiteral)
       {
-        expectedCollection.Add(nameof(TestEnum.Unlabelled));
+        expectedCollection.Add(nameof(TestEnum.Unlabeled));
       }
 
-      TestEnum.Unlabelled.GetAllStringValues().Should().BeEquivalentTo(expectedCollection);
+      TestEnum.Unlabeled.GetAllStringValues().Should().BeEquivalentTo(expectedCollection);
     }
   }
 }
