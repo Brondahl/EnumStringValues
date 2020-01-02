@@ -4,8 +4,8 @@
     <TargetFrameworks>netstandard2.0;net40;net451;net461</TargetFrameworks>
     <AssemblyName>EnumStringValues</AssemblyName>
     <PackageId>EnumStringValues</PackageId>
-    <PackageVersion>4.0.0</PackageVersion>
-    <Version>4.0.0</Version>
+    <PackageVersion>4.0.1</PackageVersion>
+    <Version>4.0.1</Version>
     <Title>Enum String Values</Title>
     <Authors>Brondahl</Authors>
     <PackageOutputPath>../nuget</PackageOutputPath>
@@ -14,11 +14,12 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>
     Library to allow conversion between an Enum Value and a string, in both directions.
-    v4.0.0 changes default behaviour to include caching and use enum literal names.
-    It also adds thread-safety, but drops support for .NET 3.5
+    v4.0.1 fixes a MemoryLeak bug, in a MaliciousUser edge-case.
     See nuget for full version history
     </Description>
     <PackageReleaseNotes>
+    Version 4.0.1
+       - Fix MemoryLeak bug, in a MaliciousUser edge-case.
     Version 4.0.0
        - Change default behaviours.
           - Caching is enabled by default.

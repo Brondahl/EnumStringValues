@@ -201,6 +201,9 @@ I'll attempt to document any feature requests I receive here, along with any des
 Version History
 ----------------
 
+- 4.0.1
+       - Fix MemoryLeak bug, in a MaliciousUser edge-case.
+
 - 4.0.0
        - Change default behaviours.
           - Caching is enabled by default.
@@ -229,10 +232,12 @@ Version History
        - Update codebase to C# 7.3 and thus add System.Enum constraints on all typed methods.
           - Only impact should be to convert run-time errors into compile-time errors
 
-- 3.0 - Convert the project to .Net Standard 2.0
+- 3.0
+       - Convert the project to .Net Standard 2.0
        - Remove the Obsolete `ParseStringValueToEnum` method.
 
-- 2.0  - Make the library use the existing Enum name as its default string value
+- 2.0
+       - Make the library use the existing Enum name as its default string value
        - Exposed the Parse methods as extensions on `String` and `List<string>`
        - Added a clone of the basic Parse method renamed as `ParseToEnum<T>`
        - NOTE: The old parse method (`ParseStringValueToEnum`) is now deprecated and will be removed in vNext. `ParseToEnum` is identical and should be used instead.
