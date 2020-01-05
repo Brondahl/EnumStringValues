@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace EnumStringValueTests
 {
@@ -15,6 +16,7 @@ namespace EnumStringValueTests
       return Time((Action) (() => act()), reps);
     }
 
+    [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
     public static long Time(Action act, int reps)
     {
       var stopwatch = new Stopwatch();
