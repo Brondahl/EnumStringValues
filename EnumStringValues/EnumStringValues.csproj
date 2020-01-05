@@ -18,6 +18,8 @@
     See nuget for full version history
     </Description>
     <PackageReleaseNotes>
+    Version 4.0.2
+       - Re-Release without DEBUG enabled (4.0.1 was unintentionally a DEBUG build)
     Version 4.0.1
        - Fix MemoryLeak bug, in a MaliciousUser edge-case.
     Version 4.0.0

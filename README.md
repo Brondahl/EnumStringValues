@@ -201,6 +201,9 @@ I'll attempt to document any feature requests I receive here, along with any des
 Version History
 ----------------
 
+- 4.0.2
+       - Re-Release without DEBUG enabled (4.0.1 was unintentionally a DEBUG build)
+
 - 4.0.1
        - Fix MemoryLeak bug, in a MaliciousUser edge-case.
 
